@@ -2,7 +2,7 @@
   <header class="ml-header">
     <h1>What is Machine Learning?</h1>
     <p>
-      Machine Learning is a branch of Artificial Intelligence that allows systems to
+      Machine Learning is a branch of Artificial Intelligence that allows symlTypes to
       learn patterns from data, without being explicitly programmed for each task.
       Instead of following fixed rules, the model adjusts its behavior as it analyzes
       more examples.
@@ -10,19 +10,25 @@
   </header>
 
   <div class="types-grid">
-    <article class="type-card" *ngFor="let type of mlTypes">
-      <h2>{{ type.name }}</h2>
-      <p>{{ type.description }}</p>
+    @for (item of mlTypes; track $index) {
+      <article class="type-card" >
+        <h2>{{ item.name }}</h2>
+        <p>{{ item.description }}</p>
 
-      <h3>Examples</h3>
-      <ul>
-        <li *ngFor="let example of type.examples">{{ example }}</li>
-      </ul>
+        <h3>Examples</h3>
+        <ul>
+          @for (example of item.examples; track $index) {
+            <li>{{ example }}</li>
+          }
+        </ul>
 
-      <h3>Common Algorithms</h3>
-      <ul>
-        <li *ngFor="let algorithm of type.algorithms">{{ algorithm }}</li>
-      </ul>
-    </article>
-  </div>
-</section>
+        <h3>Common Algorithms</h3>
+        <ul>
+          @for (algorithm of item.algorithms; track $index) {
+            <li>{{ algorithm }}</li>
+          }
+        </ul>
+      </article>
+      }
+    </div>
+  </section>
