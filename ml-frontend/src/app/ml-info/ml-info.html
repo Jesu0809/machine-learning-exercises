@@ -1,0 +1,28 @@
+<section class="ml-page">
+  <header class="ml-header">
+    <h1>What is Machine Learning?</h1>
+    <p>
+      Machine Learning is a branch of Artificial Intelligence that allows systems to
+      learn patterns from data, without being explicitly programmed for each task.
+      Instead of following fixed rules, the model adjusts its behavior as it analyzes
+      more examples.
+    </p>
+  </header>
+
+  <div class="types-grid">
+    <article class="type-card" *ngFor="let type of mlTypes">
+      <h2>{{ type.name }}</h2>
+      <p>{{ type.description }}</p>
+
+      <h3>Examples</h3>
+      <ul>
+        <li *ngFor="let example of type.examples">{{ example }}</li>
+      </ul>
+
+      <h3>Common Algorithms</h3>
+      <ul>
+        <li *ngFor="let algorithm of type.algorithms">{{ algorithm }}</li>
+      </ul>
+    </article>
+  </div>
+</section>
