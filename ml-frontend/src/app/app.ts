@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
-import { MlInfo } from './ml-info/ml-info';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  imports: [MlInfo],
+  imports: [RouterLink, RouterOutlet],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
