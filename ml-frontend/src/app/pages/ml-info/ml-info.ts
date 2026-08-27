@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MLType } from '../../models/ml-info.model';
 
-interface MLType {
-  name: string;
-  description: string;
-  examples: string[];
-  algorithms: string[];
-}
+
 
 @Component({
   selector: 'app-ml-info',
