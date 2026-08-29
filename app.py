@@ -9,16 +9,17 @@ ANGULAR_DIST_PATH = os.path.join(
     "ml-frontend", "dist", "ml-frontend", "browser"
 )
 
-@app.route("/api/predict-grade", methods=["POST"])
-def predict_grade():
-    data = request.get_json()
-    hours = float(data["hours"])
-    result = LinearRegression.calculateGrade(hours)
-    return jsonify({"result": round(float(result), 2)})
-
 @app.route("/template")
 def template():
     return render_template("index.html")
+
+@app.route("/api/predict-salary", methods=["POST"])
+def predict_salary():
+    data = request.get_json()
+    years = float(data["years"])
+    result = LinearRegression.calculateSalary(years)
+    return jsonify({"result": round(float(result), 2)})
+
 
 @app.route("/")
 @app.route("/<path:filename>")

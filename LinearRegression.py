@@ -4,22 +4,21 @@ import io
 import base64
 from sklearn.linear_model import LinearRegression
 
-#sckit-learn 
+# scikit-learn
 
 data = {
-    "Study Hours": [10, 15, 12, 8, 14, 5, 16, 7, 11, 13, 9, 4, 18, 3, 17, 6, 14, 2, 20, 1],
-    "Final Grade": [3.8, 4.2, 3.6, 3, 4.5, 2.5, 4.8, 2.8, 3.7, 4, 3.2, 2.2, 5, 1.8, 4.9, 2.7, 4.4, 1.5, 5, 1]
+    "Years of Experience": [10, 15, 12, 8, 14, 5, 16, 7, 11, 13, 9, 4, 18, 3, 17, 6, 14, 2, 20, 1],
+    "Monthly Salary (COP)": [9200000, 13200000, 10700000, 7900000, 12150000, 5600000, 13600000, 7200000, 10000000, 11700000, 8500000, 4900000, 15200000, 4000000, 14700000, 6200000, 12350000, 3400000, 16500000, 2500000]
 }
 
 df = pd.DataFrame(data)
 
-x = df[["Study Hours"]]
-y = df["Final Grade"]
+x = df[["Years of Experience"]]
+y = df["Monthly Salary (COP)"]
 
 model = LinearRegression()
 model.fit(x, y)
 
-def calculateGrade(hours):
-    result = model.predict([[hours]])[0]
+def calculateSalary(years):
+    result = model.predict([[years]])[0]
     return result
-
