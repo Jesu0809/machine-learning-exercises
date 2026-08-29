@@ -1,17 +1,17 @@
 <section class="lr-page">
   <header class="lr-header">
-    <h1>Linear Regression: Predict Grade from Study Hours</h1>
+    <h1>Linear Regression: Estimate Salary from Work Experience</h1>
     <p>
-      Enter how many hours you study, and the model will estimate your grade
-      based on a linear regression trained on sample data.
+      Enter your years of work experience, and the model will estimate a monthly
+      salary based on a linear regression trained on sample Colombian market data.
     </p>
   </header>
 
   <div class="lr-card">
-    <form (ngSubmit)="predictGrade()">
-      <label for="hours">Study Hours</label>
-      <input id="hours" type="number" step="any" name="hours" [(ngModel)]="hours" required>
-      <button type="submit" [disabled]="loading()">Predict Grade</button>
+    <form (ngSubmit)="predictSalary()">
+      <label for="years">Years of Experience</label>
+      <input id="years" type="number" step="any" name="years" [(ngModel)]="years" required>
+      <button type="submit" [disabled]="loading()">Predict Salary</button>
     </form>
 
     @if (loading()) {
@@ -21,7 +21,9 @@
       <p class="error">{{ errorMessage() }}</p>
     }
     @if (result() !== null && !loading()) {
-      <h2 class="result">Estimated Grade: {{ result() }}</h2>
+      <h2 class="result">
+        Estimated Salary: {{ result()!.toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }) }}
+      </h2>
     }
   </div>
 </section>
