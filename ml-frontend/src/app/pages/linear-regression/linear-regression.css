@@ -1,7 +1,7 @@
 .lr-page {
   max-width: 600px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 0.75rem 1rem 2rem;
   font-family: system-ui, sans-serif;
   color: #ffffff;
   min-height: calc(100vh - 80px);
@@ -11,6 +11,26 @@
   background-size: 22px 22px, cover;
   background-position: 0 0, 0 0;
   background-attachment: fixed, fixed;
+}
+
+.lr-intro {
+  margin-bottom: 2rem;
+}
+
+.lr-intro h1 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #00e5ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+.lr-intro p {
+  line-height: 1.6;
+  color: #ffffff;
+  margin-bottom: 1rem;
 }
 
 .lr-header h1 {
