@@ -1,0 +1,96 @@
+.lr-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: system-ui, sans-serif;
+  color: #ffffff;
+  min-height: calc(100vh - 80px);
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(135deg, #4e3a6e, #3a5f7d);
+  background-size: 22px 22px, cover;
+  background-position: 0 0, 0 0;
+  background-attachment: fixed, fixed;
+}
+
+.lr-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #00e5ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+.lr-header p {
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+.lr-card {
+  margin-top: calc(2rem + 30px);
+  border: 1px solid #00e5ff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5), inset 0 0 6px rgba(0, 229, 255, 0.15);
+}
+
+.lr-card form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.lr-card label {
+  font-weight: 600;
+}
+
+.lr-card input {
+  padding: 0.5rem;
+  border: 1px solid #00e5ff;
+  border-radius: 6px;
+  width: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.lr-card button {
+  padding: 0.5rem 1.25rem;
+  background: #00e5ff;
+  color: #1a1a2e;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.lr-card button:hover:not(:disabled) {
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.8);
+}
+
+.lr-card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-top: 1rem;
+  color: #ffffff;
+}
+
+.error {
+  margin-top: 1rem;
+  color: #ff6b6b;
+}
+
+.result {
+  margin-top: 1rem;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
