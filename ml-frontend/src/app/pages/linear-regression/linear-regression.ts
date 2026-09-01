@@ -1,20 +1,18 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { SalaryPredictionResponse } from '../../models/salary-prediction.model';
-import { SalaryDataResponse, SalaryRecord } from '../../models/salary-data.model';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LinearRegressionService } from '../../services/linear-regression.service';
+import { SalaryRecord } from '../../models/salary-data.model';
 
 @Component({
   selector: 'app-linear-regression',
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './linear-regression.html',
   styleUrl: './linear-regression.css'
 })
 export class LinearRegression implements OnInit {
-  years: number | null = null;
-  result = signal<number | null>(null);
-  loading = signal(false);
-  errorMessage = signal<string | null>(null);
+  public result = signal<number | null>(null);
+  public loading = signal(false);
+  public errorMessage = signal<string | null>(null);
 
   limitOptions = [2, 5, 10, 20, 50, 100, 500];
   limit = 20;
@@ -24,21 +22,28 @@ export class LinearRegression implements OnInit {
   records = signal<SalaryRecord[]>([]);
   tableLoading = signal(false);
 
-  constructor(private http: HttpClient) {}
+  private readonly linearRegressionService = inject(LinearRegressionService);
+  private readonly formBuilder = inject(FormBuilder);
+
+  public form = this.formBuilder.group({
+    years: [null as number | null]
+  });
 
   ngOnInit() {
     this.fetchSalaryData();
   }
 
-  predictSalary() {
-    if (this.years === null) {
+  public predictSalary(): void {
+    const years = this.form.value.years;
+    if (!years) {
       return;
     }
+
     this.loading.set(true);
     this.errorMessage.set(null);
     this.result.set(null);
 
-    this.http.post<SalaryPredictionResponse>('/api/predict-salary', { years: this.years })
+    this.linearRegressionService.calculateSalaryPrediction(years)
       .subscribe({
         next: (response) => {
           this.result.set(response.result);
@@ -53,7 +58,7 @@ export class LinearRegression implements OnInit {
 
   fetchSalaryData() {
     this.tableLoading.set(true);
-    this.http.get<SalaryDataResponse>(`/api/salary-data?page=${this.page()}&limit=${this.limit}`)
+    this.linearRegressionService.getSalaryData(this.page(), this.limit)
       .subscribe({
         next: (response) => {
           this.records.set(response.records);
