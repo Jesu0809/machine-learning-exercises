@@ -13,6 +13,43 @@
   background-attachment: fixed, fixed;
 }
 
+.lr-intro {
+  border: 1px solid #00e5ff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5), inset 0 0 6px rgba(0, 229, 255, 0.15);
+}
+
+.lr-intro h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #00e5ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+.lr-intro p {
+  line-height: 1.6;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.lr-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.lr-intro em {
+  color: #00e5ff;
+  font-style: normal;
+  font-weight: 600;
+}
+
 .lr-header h1 {
   font-size: 2rem;
   margin-bottom: 0.5rem;

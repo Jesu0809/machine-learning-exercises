@@ -1,4 +1,33 @@
 <section class="lr-page">
+
+  <article class="lr-intro">
+    <h1>Linear Regression</h1>
+    <p>
+      Linear regression is one of the most fundamental algorithms in machine learning and statistics.
+      It models the relationship between an independent variable (the input, such as years of work
+      experience) and a dependent variable (the output, such as salary) by fitting a straight line
+      through the observed data points. The core idea is that as the input increases or decreases,
+      the output changes at a constant, predictable rate, which is represented by the slope of the line.
+    </p>
+    <p>
+      This technique is widely used because it is simple, fast, and easy to interpret. It serves as a
+      baseline model for prediction tasks across many fields, such as estimating salaries based on
+      experience, forecasting sales based on advertising spend, predicting house prices based on square
+      footage, or analyzing how one factor influences another. Whenever there is a reasonable assumption
+      that two variables move together in a roughly linear way, linear regression provides a quick and
+      reliable way to quantify that relationship and make predictions on new, unseen data.
+    </p>
+    <p>
+      Mathematically, the model finds the line that best fits the data by minimizing the difference
+      between the predicted values and the actual observed values, typically using a method called
+      Ordinary Least Squares. This means the algorithm searches for the slope and intercept that
+      minimize the sum of the squared errors (the vertical distances between each data point and the
+      line). Once trained, the resulting equation, in the form <em>y = mx + b</em>, can be used to plug
+      in a new value of <em>x</em> (years of experience) and instantly obtain a predicted value of
+      <em>y</em> (estimated salary), which is exactly what the calculator below does.
+    </p>
+  </article>
+
   <header class="lr-header">
     <h1>Linear Regression: Estimate Salary from Work Experience</h1>
     <p>
@@ -12,9 +41,9 @@
   </div>
 
   <div class="lr-card">
-    <form (ngSubmit)="predictSalary()">
+    <form [formGroup]="form" (ngSubmit)="predictSalary()">
       <label for="years">Years of Experience</label>
-      <input id="years" type="number" step="any" name="years" [(ngModel)]="years" required>
+      <input id="years" formControlName="years" type="number" step="any" required>
       <button type="submit" [disabled]="loading()">Predict Salary</button>
     </form>
 
@@ -38,7 +67,7 @@
 
       <div class="lr-limit-select">
         <label for="limit">Rows per page</label>
-        <select id="limit" [(ngModel)]="limit" (ngModelChange)="onLimitChange()">
+        <select id="limit" [(ngModel)]="limit" [ngModelOptions]="{standalone: true}" (ngModelChange)="onLimitChange()">
           @for (option of limitOptions; track option) {
             <option [value]="option">{{ option }}</option>
           }
