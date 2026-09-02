@@ -28,18 +28,22 @@
     </p>
   </article>
 
-  <article class="lr-header">
+  <header class="lr-header">
     <h1>Linear Regression: Estimate Salary from Work Experience</h1>
     <p>
       Enter your years of work experience, and the model will estimate a monthly
       salary based on a linear regression trained on sample Colombian market data.
     </p>
-  </article>
+  </header>
+
+  <div class="lr-chart-wrapper">
+    <img class="lr-chart" src="/api/regression-plot" alt="Scatter plot of years of experience vs monthly salary, with the regression line">
+  </div>
 
   <div class="lr-card">
     <form [formGroup]="form" (ngSubmit)="predictSalary()">
       <label for="years">Years of Experience</label>
-      <input formControlName="years" type="number" step="any" name="years" required>
+      <input id="years" formControlName="years" type="number" step="any" required>
       <button type="submit" [disabled]="loading()">Predict Salary</button>
     </form>
 
@@ -54,5 +58,50 @@
         Estimated Salary: {{ result()!.toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }) }}
       </h2>
     }
+  </div>
+
+  <div class="lr-data-card">
+    <div class="lr-data-header">
+      <h2>Training Dataset</h2>
+      <p>{{ totalRecords() }} records &mdash; Years of Experience vs. Monthly Salary (COP)</p>
+
+      <div class="lr-limit-select">
+        <label for="limit">Rows per page</label>
+        <select id="limit" [(ngModel)]="limit" [ngModelOptions]="{standalone: true}" (ngModelChange)="onLimitChange()">
+          @for (option of limitOptions; track option) {
+            <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <table class="lr-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Years of Experience</th>
+          <th>Monthly Salary (COP)</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (record of records(); track $index) {
+          <tr>
+            <td>{{ (page() - 1) * limit + $index + 1 }}</td>
+            <td>{{ record.years }}</td>
+            <td>{{ record.salary.toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (tableLoading()) {
+      <p class="status">Loading...</p>
+    }
+
+    <div class="lr-pagination">
+      <button type="button" (click)="goToPreviousPage()" [disabled]="page() <= 1">Previous</button>
+      <span>Page {{ page() }} of {{ totalPages() }}</span>
+      <button type="button" (click)="goToNextPage()" [disabled]="page() >= totalPages()">Next</button>
+    </div>
   </div>
 </section>
