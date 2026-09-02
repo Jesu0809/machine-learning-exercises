@@ -1,7 +1,12 @@
 <nav class="app-nav">
-  <a class="app-nav-link" routerLink="/ml-info" routerLinkActive="active">What is ML?</a>
-  <a class="app-nav-link" routerLink="/ml-use-cases" routerLinkActive="active">Use Cases</a>
-  <a class="app-nav-link" routerLink="/linear-regression" routerLinkActive="active">Linear Regression</a>
+  <a class="app-nav-link app-nav-home" routerLink="/" routerLinkActive="active">Home</a>
+
+  <div class="app-nav-links">
+    <a class="app-nav-link" routerLink="/ml-info" routerLinkActive="active">What is ML?</a>
+    <a class="app-nav-link" routerLink="/ml-types" routerLinkActive="active">ML Types</a>
+    <a class="app-nav-link" routerLink="/ml-use-cases" routerLinkActive="active">Use Cases</a>
+  </div>
+
 </nav>
 
 <router-outlet></router-outlet>

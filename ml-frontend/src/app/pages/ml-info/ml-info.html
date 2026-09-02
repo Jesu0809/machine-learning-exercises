@@ -1,38 +1,15 @@
 <section class="ml-page">
   <header class="ml-header">
-    <h1>Types of Machine Learning</h1>
+    <h1>What is Machine Learning?</h1>
     <p>
-      Machine Learning can be grouped into three main types, based on how the
-      model learns from data.
+      Machine Learning is a branch of artificial intelligence that enables computers to learn
+      patterns and make decisions or predictions directly from data, rather than following
+      explicitly programmed rules. Instead of a developer writing step-by-step instructions for
+      every possible scenario, a machine learning model is trained on examples, and it gradually
+      adjusts itself to recognize patterns and relationships within that data. Once trained, the
+      model can generalize what it learned to make predictions on new, unseen inputs, which is what
+      makes it so powerful for tasks like recognizing images, predicting prices, detecting fraud,
+      or recommending products.
     </p>
   </header>
-
-  <div class="types-grid">
-    @for (item of mlTypes; track $index) {
-      <article class="type-card">
-        <h2>{{ item.name }}</h2>
-        <p>{{ item.description }}</p>
-
-        <h3>Examples</h3>
-        <ul>
-          @for (example of item.examples; track $index) {
-            <li>{{ example }}</li>
-          }
-        </ul>
-
-        <h3>Common Algorithms</h3>
-        <ul>
-          @for (algorithm of item.algorithms; track $index) {
-            <li>
-              @if (algorithm.link) {
-                <a [routerLink]="algorithm.link" class="algorithm-link">{{ algorithm.name }}</a>
-              } @else {
-                {{ algorithm.name }}
-              }
-            </li>
-          }
-        </ul>
-      </article>
-    }
-  </div>
 </section>

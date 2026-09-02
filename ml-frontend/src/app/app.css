@@ -6,12 +6,18 @@
   z-index: 1000;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 1.5rem;
   min-height: 80px;
   box-sizing: border-box;
   background: linear-gradient(135deg, #4e3a6e, #3a5f7d);
   border-bottom: 5px solid #00e5ff;
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.app-nav-links {
+  display: flex;
+  align-items: center;
 }
 
 .app-nav-link {
@@ -22,6 +28,14 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.app-nav-home {
+  margin-left: 0;
+}
+
+.app-nav-lr {
+  padding: 0 65px;
 }
 
 .app-nav-link:hover {

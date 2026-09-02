@@ -1,0 +1,38 @@
+<section class="ml-page">
+  <header class="ml-header">
+    <h1>Types of Machine Learning</h1>
+    <p>
+      Machine Learning can be grouped into three main types, based on how the
+      model learns from data.
+    </p>
+  </header>
+
+  <div class="types-grid">
+    @for (item of mlTypes; track $index) {
+      <article class="type-card">
+        <h2>{{ item.name }}</h2>
+        <p>{{ item.description }}</p>
+
+        <h3>Examples</h3>
+        <ul>
+          @for (example of item.examples; track $index) {
+            <li>{{ example }}</li>
+          }
+        </ul>
+
+        <h3>Common Algorithms</h3>
+        <ul>
+          @for (algorithm of item.algorithms; track $index) {
+            <li>
+              @if (algorithm.link) {
+                <a [routerLink]="algorithm.link" class="algorithm-link">{{ algorithm.name }}</a>
+              } @else {
+                {{ algorithm.name }}
+              }
+            </li>
+          }
+        </ul>
+      </article>
+    }
+  </div>
+</section>
