@@ -81,3 +81,13 @@
   font-size: 0.9rem;
   color: #ffffff;
 }
+.algorithm-link {
+  color: #00e5ff;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: text-shadow 0.2s ease;
+}
+
+.algorithm-link:hover {
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+}
