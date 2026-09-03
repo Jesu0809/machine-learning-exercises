@@ -1,0 +1,50 @@
+<div class="container py-5">
+  <div class="mb-4">
+    <h1>Types of Machine Learning</h1>
+    <p class="lead">
+      Machine Learning can be grouped into three main types, based on how the model learns from data.
+    </p>
+  </div>
+
+  <div class="row g-4">
+    @for (item of mlTypes; track item.name) {
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header">
+            <span class="badge" [ngClass]="item.badgeClass">{{ item.name }}</span>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <p class="card-text">{{ item.definition }}</p>
+
+            <h3 class="h6 mt-2">Main Characteristics</h3>
+            <ul class="small">
+              @for (characteristic of item.characteristics; track $index) {
+                <li>{{ characteristic }}</li>
+              }
+            </ul>
+
+            <h3 class="h6">Types of Problems It Can Solve</h3>
+            <ul class="small">
+              @for (problem of item.problems; track $index) {
+                <li>{{ problem }}</li>
+              }
+            </ul>
+
+            <h3 class="h6">Common Algorithms</h3>
+            <ul class="small mb-0">
+              @for (algorithm of item.algorithms; track $index) {
+                <li>
+                  @if (algorithm.link) {
+                    <a [routerLink]="algorithm.link">{{ algorithm.name }}</a>
+                  } @else {
+                    {{ algorithm.name }}
+                  }
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

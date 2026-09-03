@@ -1,38 +1,101 @@
-<section class="ml-page">
-  <header class="ml-header">
-    <h1>Types of Machine Learning</h1>
-    <p>
-      Machine Learning can be grouped into three main types, based on how the
-      model learns from data.
+<div class="container py-5">
+  <div class="mb-5">
+    <h1>Machine Learning: Concepts</h1>
+    <p class="lead">
+      Machine Learning is a branch of artificial intelligence that enables computers to learn
+      patterns and make decisions or predictions directly from data, instead of following
+      explicitly programmed rules.
     </p>
-  </header>
-
-  <div class="types-grid">
-    @for (item of mlTypes; track $index) {
-      <article class="type-card">
-        <h2>{{ item.name }}</h2>
-        <p>{{ item.description }}</p>
-
-        <h3>Examples</h3>
-        <ul>
-          @for (example of item.examples; track $index) {
-            <li>{{ example }}</li>
-          }
-        </ul>
-
-        <h3>Common Algorithms</h3>
-        <ul>
-          @for (algorithm of item.algorithms; track $index) {
-            <li>
-              @if (algorithm.link) {
-                <a [routerLink]="algorithm.link" class="algorithm-link">{{ algorithm.name }}</a>
-              } @else {
-                {{ algorithm.name }}
-              }
-            </li>
-          }
-        </ul>
-      </article>
-    }
   </div>
-</section>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">What is Machine Learning?</h2>
+          <p class="card-text">
+            A field of artificial intelligence where systems learn patterns from examples instead
+            of being explicitly told what to do for every possible case.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Main Purpose</h2>
+          <p class="card-text">
+            To generalize from known examples so the system can make accurate predictions or
+            decisions on new, previously unseen data.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Data &rarr; Training &rarr; Model &rarr; Prediction</h2>
+          <div class="row text-center g-3 mt-1">
+            <div class="col-6 col-md-3">
+              <div class="p-3 border rounded-3 h-100">
+                <div class="fs-4">📊</div>
+                <div class="fw-semibold">Data</div>
+                <div class="text-muted small">Raw examples collected from the real world</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-3 border rounded-3 h-100">
+                <div class="fs-4">⚙️</div>
+                <div class="fw-semibold">Training</div>
+                <div class="text-muted small">The algorithm learns patterns from the data</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-3 border rounded-3 h-100">
+                <div class="fs-4">🧠</div>
+                <div class="fw-semibold">Model</div>
+                <div class="text-muted small">The trained result that captures those patterns</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="p-3 border rounded-3 h-100">
+                <div class="fs-4">🎯</div>
+                <div class="fw-semibold">Prediction</div>
+                <div class="text-muted small">The model's output for new, unseen input</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Importance of Data</h2>
+          <p class="card-text">
+            Data is the foundation of every model: the quality, quantity, and relevance of the
+            training data directly determine how accurate and reliable the model's predictions
+            will be. Poor or biased data leads to poor or biased predictions.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Simple Examples</h2>
+          <ul class="mb-0">
+            <li>Predicting a salary from years of experience</li>
+            <li>Filtering spam emails</li>
+            <li>Recommending movies or products</li>
+            <li>Recognizing objects in photos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

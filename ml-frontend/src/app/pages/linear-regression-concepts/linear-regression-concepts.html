@@ -1,0 +1,142 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Linear Regression &mdash; Concepts</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>Linear Regression: Concepts</h1>
+    <p class="lead">
+      Before using the calculator, here are the fundamental ideas behind Simple Linear Regression.
+    </p>
+  </div>
+
+  <div class="accordion" id="lrConceptsAccordion">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+          What is Linear Regression?
+        </button>
+      </h2>
+      <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Linear Regression is a supervised Machine Learning algorithm that models the relationship
+          between two quantitative variables by fitting a straight line through the observed data
+          points. It assumes that, on average, one variable changes at a constant rate with respect
+          to the other.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+          What Types of Problems Can It Solve?
+        </button>
+      </h2>
+      <div id="c2" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          It is used for prediction and forecasting problems where the goal is to estimate a
+          numeric value, such as estimating a salary from years of experience, predicting a house
+          price from its size, or forecasting sales from advertising spend.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3">
+          Independent Variable (X)
+        </button>
+      </h2>
+      <div id="c3" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          The independent variable is the input used to make a prediction. It is the value the
+          user provides to the model, plotted on the X-axis of the regression chart.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4">
+          Dependent Variable (Y)
+        </button>
+      </h2>
+      <div id="c4" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          The dependent variable is the outcome the model tries to predict. Its value is assumed to
+          depend on the independent variable, and it is plotted on the Y-axis of the regression chart.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c5">
+          Relationship Between Variables
+        </button>
+      </h2>
+      <div id="c5" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Simple Linear Regression assumes a linear relationship: as the independent variable
+          increases or decreases, the dependent variable tends to change at a roughly constant
+          rate. A scatter plot is used to visually verify this assumption before trusting the model.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c6">
+          The Regression Line
+        </button>
+      </h2>
+      <div id="c6" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          The regression line is the straight line, in the form <code>y = mx + b</code>, that best
+          fits the training data. It is found using Ordinary Least Squares, a method that
+          minimizes the sum of the squared distances between each data point and the line.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c7">
+          Prediction
+        </button>
+      </h2>
+      <div id="c7" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Once the line is fitted, a prediction is made by plugging a new value of the independent
+          variable into the equation to obtain an estimated value for the dependent variable.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c8">
+          A Simple Example
+        </button>
+      </h2>
+      <div id="c8" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Suppose a model learns the equation <code>salary = 500,000 &times; years + 1,000,000</code>.
+          For someone with 10 years of experience, the model would predict a monthly salary of
+          <code>500,000 &times; 10 + 1,000,000 = 6,000,000</code>. This is exactly the kind of
+          calculation performed by the model on the Application page.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a routerLink="/linear-regression/application" class="btn btn-primary mt-4">
+    Try the Application &rarr;
+  </a>
+</div>
