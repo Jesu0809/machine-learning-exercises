@@ -1,12 +1,47 @@
-<nav class="app-nav">
-  <a class="app-nav-link app-nav-home" routerLink="/" routerLinkActive="active">Home</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">ML Explorer</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div class="app-nav-links">
-    <a class="app-nav-link" routerLink="/ml-info" routerLinkActive="active">What is ML?</a>
-    <a class="app-nav-link" routerLink="/ml-types" routerLinkActive="active">ML Types</a>
-    <a class="app-nav-link" routerLink="/ml-use-cases" routerLinkActive="active">Use Cases</a>
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Machine Learning
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end">
+            <li><a class="dropdown-item" routerLink="/ml-info" routerLinkActive="active">Concepts</a></li>
+            <li><a class="dropdown-item" routerLink="/ml-types" routerLinkActive="active">Types of Machine Learning</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Use Cases</h6></li>
+            <li><a class="dropdown-item ps-4" routerLink="/use-cases/1" routerLinkActive="active">Use Case 1</a></li>
+            <li><a class="dropdown-item ps-4" routerLink="/use-cases/2" routerLinkActive="active">Use Case 2</a></li>
+            <li><a class="dropdown-item ps-4" routerLink="/use-cases/3" routerLinkActive="active">Use Case 3</a></li>
+            <li><a class="dropdown-item ps-4" routerLink="/use-cases/4" routerLinkActive="active">Use Case 4</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Supervised
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end">
+            <li><h6 class="dropdown-header">Linear Regression</h6></li>
+            <li><a class="dropdown-item ps-4" routerLink="/linear-regression/concepts" routerLinkActive="active">Concepts</a></li>
+            <li><a class="dropdown-item ps-4" routerLink="/linear-regression/application" routerLinkActive="active">Application</a></li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
   </div>
-
 </nav>
 
 <router-outlet></router-outlet>

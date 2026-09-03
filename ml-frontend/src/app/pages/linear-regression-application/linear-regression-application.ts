@@ -1,20 +1,20 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { LinearRegressionService } from '../../services/linear-regression.service';
 import { SalaryRecord } from '../../models/salary-data.model';
 
 @Component({
-  selector: 'app-linear-regression',
-  imports: [FormsModule, ReactiveFormsModule],
-  templateUrl: './linear-regression.html',
-  styleUrl: './linear-regression.css'
+  selector: 'app-linear-regression-application',
+  imports: [FormsModule, ReactiveFormsModule, RouterLink],
+  templateUrl: './linear-regression-application.html'
 })
-export class LinearRegression implements OnInit {
+export class LinearRegressionApplication implements OnInit {
   public result = signal<number | null>(null);
   public loading = signal(false);
   public errorMessage = signal<string | null>(null);
 
-  limitOptions = [2, 5, 10, 20, 50, 100, 500];
+  limitOptions = [10, 20, 50, 100, 500];
   limit = 20;
   page = signal(1);
   totalPages = signal(1);
@@ -26,7 +26,7 @@ export class LinearRegression implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
 
   public form = this.formBuilder.group({
-    years: [null as number | null]
+    years: [null as number | null, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/), Validators.min(0)]]
   });
 
   ngOnInit() {
@@ -34,10 +34,13 @@ export class LinearRegression implements OnInit {
   }
 
   public predictSalary(): void {
-    const years = this.form.value.years;
-    if (!years) {
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) {
       return;
     }
+
+    const years = this.form.value.years as number;
 
     this.loading.set(true);
     this.errorMessage.set(null);
