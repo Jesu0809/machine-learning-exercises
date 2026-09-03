@@ -9,6 +9,7 @@ import { UseCase3 } from './pages/use-case-3/use-case-3';
 import { UseCase4 } from './pages/use-case-4/use-case-4';
 import { LinearRegressionConcepts } from './pages/linear-regression-concepts/linear-regression-concepts';
 import { LinearRegressionApplication } from './pages/linear-regression-application/linear-regression-application';
+import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
   { path: '', component: Home, pathMatch: 'full' },
@@ -21,4 +22,5 @@ export const routes: Routes = [
   { path: 'use-cases/4', component: UseCase4 },
   { path: 'linear-regression/concepts', component: LinearRegressionConcepts },
   { path: 'linear-regression/application', component: LinearRegressionApplication },
+  { path: '**', component: NotFound },
 ];
