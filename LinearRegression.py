@@ -19,28 +19,79 @@ y = df["Monthly Salary (COP)"]
 model = LinearRegression()
 model.fit(x, y)
 
+X_MIN = float(df["Years of Experience"].min())
+X_MAX = float(df["Years of Experience"].max())
+
 
 def calculateSalary(years_value):
-    result = model.predict([[years_value]])[0]
+    features = pd.DataFrame({"Years of Experience": [years_value]})
+    result = model.predict(features)[0]
     return result
 
 
-def generateRegressionPlot():
+def getModelInfo():
+    """Everything the UI needs to describe the trained model (no hard-coded values)."""
+    slope = float(model.coef_[0])
+    intercept = float(model.intercept_)
+    return {
+        "slope": slope,
+        "intercept": intercept,
+        "r2": float(model.score(x, y)),
+        "records": int(len(df)),
+        "xMin": X_MIN,
+        "xMax": X_MAX,
+        "xMean": float(df["Years of Experience"].mean()),
+        "yMin": float(df["Monthly Salary (COP)"].min()),
+        "yMax": float(df["Monthly Salary (COP)"].max()),
+        "yMean": float(df["Monthly Salary (COP)"].mean()),
+        "equation": f"salary = {slope:,.0f} x years + {intercept:,.0f}",
+        "xName": "Years of Experience",
+        "yName": "Monthly Salary (COP)",
+        "xUnit": "years",
+        "yUnit": "COP",
+    }
+
+
+def generateRegressionPlot(predict_x=None):
+    ink = "#e6ecff"
+    accent = "#21d4e8"
+    marker = "#ffd166"
+
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.scatter(df["Years of Experience"], df["Monthly Salary (COP)"], alpha=0.35, color="#4e3a6e", label="Training data")
+    fig.patch.set_alpha(0)
+    ax.set_facecolor("none")
 
-    x_line = np.linspace(df["Years of Experience"].min(), df["Years of Experience"].max(), 100).reshape(-1, 1)
+    ax.scatter(df["Years of Experience"], df["Monthly Salary (COP)"],
+               alpha=0.45, s=18, color="#8b7fd6", edgecolors="none", label="Training data")
+
+    x_line = pd.DataFrame({
+        "Years of Experience": np.linspace(X_MIN, X_MAX, 100)
+    })
     y_line = model.predict(x_line)
-    ax.plot(x_line, y_line, color="#00b8d4", linewidth=2.5, label="Regression line")
+    ax.plot(x_line, y_line, color=accent, linewidth=2.5, label="Regression line")
 
-    ax.set_title("Years of Experience vs Monthly Salary (COP)")
-    ax.set_xlabel("Years of Experience")
-    ax.set_ylabel("Monthly Salary (COP)")
-    ax.legend()
+    if predict_x is not None:
+        pred_y = float(calculateSalary(predict_x))
+        ax.scatter([predict_x], [pred_y], s=120, color=marker, edgecolors="#1c2450",
+                   zorder=5, label=f"Prediction ({predict_x:g} yrs)")
+        ax.annotate(f"COP {pred_y:,.0f}", (predict_x, pred_y),
+                    textcoords="offset points", xytext=(10, 12), color=marker, fontweight="bold")
+        ax.plot([predict_x, predict_x], [ax.get_ylim()[0], pred_y],
+                color=marker, linestyle="--", linewidth=1, alpha=0.6)
+
+    ax.set_title("Years of Experience vs Monthly Salary (COP)", color=ink, fontweight="bold")
+    ax.set_xlabel("Years of Experience", color=ink)
+    ax.set_ylabel("Monthly Salary (COP)", color=ink)
+    ax.tick_params(colors=ink)
+    for spine in ax.spines.values():
+        spine.set_color("#5a6a99")
+    ax.grid(True, color="#ffffff", alpha=0.08)
+
+    ax.legend(facecolor="#1c2450", edgecolor="#5a6a99", labelcolor=ink)
     fig.tight_layout()
 
     buffer = io.BytesIO()
-    fig.savefig(buffer, format="png")
+    fig.savefig(buffer, format="png", transparent=True, dpi=110)
     plt.close(fig)
     buffer.seek(0)
     return buffer.getvalue()

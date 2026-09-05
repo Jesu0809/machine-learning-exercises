@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -7,5 +7,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('ml-frontend');
+  protected readonly title = signal('Machine Learning');
+  protected readonly showScrollTop = signal(false);
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.showScrollTop.set(window.scrollY > 400);
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
