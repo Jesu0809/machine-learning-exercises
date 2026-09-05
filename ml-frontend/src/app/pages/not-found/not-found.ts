@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-ml-info',
+  selector: 'app-not-found',
   imports: [RouterLink],
-  templateUrl: './ml-info.html'
+  templateUrl: './not-found.html',
 })
-export class MlInfo {
-}
+export class NotFound {}

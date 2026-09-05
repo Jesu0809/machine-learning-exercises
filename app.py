@@ -1,6 +1,6 @@
 import os
 import math
-from flask import Flask, jsonify, render_template, request, send_from_directory, Response
+from flask import Flask, jsonify, request, send_from_directory, Response
 import LinearRegression
 
 app = Flask(__name__)
@@ -12,15 +12,41 @@ ANGULAR_DIST_PATH = os.path.join(
 
 @app.route("/api/predict-salary", methods=["POST"])
 def predict_salary():
-    data = request.get_json()
-    years = float(data["years"])
+    data = request.get_json(silent=True) or {}
+    try:
+        years = float(data["years"])
+    except (KeyError, TypeError, ValueError):
+        return jsonify({"error": "A numeric 'years' value is required."}), 400
+
     result = LinearRegression.calculateSalary(years)
-    return jsonify({"result": round(float(result), 2)})
+    info = LinearRegression.getModelInfo()
+    return jsonify({
+        "result": round(float(result), 2),
+        "years": years,
+        "slope": info["slope"],
+        "intercept": info["intercept"],
+        "equation": info["equation"],
+        "withinRange": info["xMin"] <= years <= info["xMax"],
+        "xMin": info["xMin"],
+        "xMax": info["xMax"],
+    })
+
+@app.route("/api/model-info", methods=["GET"])
+def model_info():
+    return jsonify(LinearRegression.getModelInfo())
 
 @app.route("/api/regression-plot")
 def regression_plot():
-    image_bytes = LinearRegression.generateRegressionPlot()
-    return Response(image_bytes, mimetype="image/png")
+    predict_raw = request.args.get("predict")
+    predict_x = None
+    if predict_raw not in (None, ""):
+        try:
+            predict_x = float(predict_raw)
+        except ValueError:
+            predict_x = None
+    image_bytes = LinearRegression.generateRegressionPlot(predict_x)
+    return Response(image_bytes, mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
 
 @app.route("/api/salary-data", methods=["GET"])
 def salary_data():
@@ -51,10 +77,6 @@ def salary_data():
         "totalRecords": total_records,
         "totalPages": total_pages
     })
-
-@app.route("/template")
-def template():
-    return render_template("index.html")
 
 @app.route("/")
 @app.route("/<path:filename>")
