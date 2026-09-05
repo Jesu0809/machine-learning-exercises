@@ -1,13 +1,12 @@
 .venv/
 __pycache__/
 *.pyc
-
 *.py[codz]
 *$py.class
-
 *.so
-
 .Python
 build/
 develop-eggs/
 dist/
+.DS_Store
+evidencias/
