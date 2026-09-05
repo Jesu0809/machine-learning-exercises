@@ -4,19 +4,29 @@
     <h1 class="display-5 fw-bold">Explore How Machines Learn</h1>
     <p class="lead col-lg-8 mx-auto">
       A hands-on space for understanding core Machine Learning ideas, from the basic concepts
-      to a real, working Linear Regression model you can play with.
+      to a real, working Linear Regression model — trained on 500 records — that you can try
+      yourself.
     </p>
+    <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+      <a routerLink="/ml-info" class="btn btn-primary">Start with the concepts</a>
+      <a routerLink="/linear-regression/application" class="btn btn-outline-primary">
+        Jump to the model &rarr;
+      </a>
+    </div>
   </div>
 </div>
 
 <div class="container py-5">
+  <h2 class="h4 mb-1">Browse the project</h2>
+  <p class="text-muted mb-4">Four sections take you from theory to a working prediction.</p>
+
   <div class="row g-4">
     <div class="col-sm-6 col-lg-3">
       <a routerLink="/ml-info" class="text-decoration-none">
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
             <div class="fs-2 mb-2">❓</div>
-            <h2 class="h5 card-title text-body">What is ML?</h2>
+            <h3 class="h5 card-title text-body">What is ML?</h3>
             <p class="card-text text-muted small">A plain-language introduction to machine learning.</p>
           </div>
         </div>
@@ -28,7 +38,7 @@
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
             <div class="fs-2 mb-2">🧩</div>
-            <h2 class="h5 card-title text-body">ML Types</h2>
+            <h3 class="h5 card-title text-body">ML Types</h3>
             <p class="card-text text-muted small">Supervised, unsupervised, and reinforcement learning.</p>
           </div>
         </div>
@@ -40,8 +50,8 @@
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
             <div class="fs-2 mb-2">💡</div>
-            <h2 class="h5 card-title text-body">Use Cases</h2>
-            <p class="card-text text-muted small">Real-world examples of ML across industries.</p>
+            <h3 class="h5 card-title text-body">Use Cases</h3>
+            <p class="card-text text-muted small">Four real-world examples of ML across industries.</p>
           </div>
         </div>
       </a>
@@ -52,11 +62,35 @@
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
             <div class="fs-2 mb-2">📈</div>
-            <h2 class="h5 card-title text-body">Linear Regression</h2>
+            <h3 class="h5 card-title text-body">Linear Regression</h3>
             <p class="card-text text-muted small">Predict a monthly salary from years of experience.</p>
           </div>
         </div>
       </a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+      <div class="row align-items-center g-3">
+        <div class="col-md-8">
+          <span class="badge text-bg-primary mb-2">Supervised Learning</span>
+          <h2 class="h4">Simple Linear Regression, end to end</h2>
+          <p class="mb-0 text-muted">
+            See the problem framing, the two quantitative variables, the 500-record dataset, a
+            scatter plot with the fitted regression line, and an interactive form whose
+            predictions come straight from a trained scikit-learn model.
+          </p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <a routerLink="/linear-regression/concepts" class="btn btn-outline-primary mb-2 w-100 w-md-auto">
+            Read the concepts
+          </a>
+          <a routerLink="/linear-regression/application" class="btn btn-primary w-100 w-md-auto">
+            Open the application
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
