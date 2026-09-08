@@ -3,25 +3,25 @@
     <p class="text-uppercase small fw-semibold text-info mb-2">Machine Learning</p>
     <h1 class="display-5 fw-bold">Explore How Machines Learn</h1>
     <p class="lead col-lg-8 mx-auto">
-      A hands-on space for understanding core Machine Learning ideas, from the basic concepts
-      to a real, working Linear Regression model — trained on 500 records — that you can try
-      yourself.
+      A hands-on space for core Machine Learning ideas and three working models you can try
+      yourself: a Linear Regression that predicts a salary, and two classifiers &mdash; Logistic
+      Regression and a Decision Tree &mdash; trained on CSV data with an 80/20 split.
     </p>
     <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
       <a routerLink="/ml-info" class="btn btn-primary">Start with the concepts</a>
-      <a routerLink="/linear-regression/application" class="btn btn-outline-primary">
-        Jump to the model &rarr;
+      <a routerLink="/logistic-regression/application" class="btn btn-outline-primary">
+        Try a classifier &rarr;
       </a>
     </div>
   </div>
 </div>
 
 <div class="container py-5">
-  <h2 class="h4 mb-1">Browse the project</h2>
-  <p class="text-muted mb-4">Four sections take you from theory to a working prediction.</p>
+  <h2 class="h4 mb-1">Start here</h2>
+  <p class="text-muted mb-4">The theory behind everything in the project.</p>
 
   <div class="row g-4">
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-sm-6 col-lg-4">
       <a routerLink="/ml-info" class="text-decoration-none">
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
@@ -33,7 +33,7 @@
       </a>
     </div>
 
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-sm-6 col-lg-4">
       <a routerLink="/ml-types" class="text-decoration-none">
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
@@ -45,7 +45,7 @@
       </a>
     </div>
 
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-sm-6 col-lg-4">
       <a routerLink="/ml-use-cases" class="text-decoration-none">
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
@@ -56,17 +56,66 @@
         </div>
       </a>
     </div>
+  </div>
 
-    <div class="col-sm-6 col-lg-3">
-      <a routerLink="/linear-regression/application" class="text-decoration-none">
-        <div class="card h-100 shadow-sm text-center">
-          <div class="card-body">
-            <div class="fs-2 mb-2">📈</div>
-            <h3 class="h5 card-title text-body">Linear Regression</h3>
-            <p class="card-text text-muted small">Predict a monthly salary from years of experience.</p>
+  <h2 class="h4 mb-1 mt-5">Supervised models</h2>
+  <p class="text-muted mb-4">
+    One regression model and two classifiers. Each one has a Concepts page, an interactive
+    Application, and its evaluation.
+  </p>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+          <div class="fs-2 mb-2">📈</div>
+          <h3 class="h5 card-title">Linear Regression</h3>
+          <p class="card-text text-muted small flex-grow-1">
+            Predict a monthly salary from years of experience &mdash; a continuous value fitted
+            with Ordinary Least Squares.
+          </p>
+          <div class="d-flex gap-2 flex-wrap">
+            <a routerLink="/linear-regression/concepts" class="btn btn-outline-primary btn-sm">Concepts</a>
+            <a routerLink="/linear-regression/application" class="btn btn-primary btn-sm">Application</a>
           </div>
         </div>
-      </a>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+          <div class="fs-2 mb-2">🎯</div>
+          <h3 class="h5 card-title">Logistic Regression</h3>
+          <p class="card-text text-muted small flex-grow-1">
+            Classify a borrower as Low Risk or High Risk from their debt-to-income ratio &mdash;
+            binary classification with a probability and a threshold.
+          </p>
+          <div class="d-flex gap-2 flex-wrap">
+            <a routerLink="/logistic-regression/concepts" class="btn btn-outline-primary btn-sm">Concepts</a>
+            <a routerLink="/logistic-regression/application" class="btn btn-primary btn-sm">Application</a>
+            <a routerLink="/logistic-regression/metrics" class="btn btn-outline-primary btn-sm">Metrics</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+          <div class="fs-2 mb-2">🌳</div>
+          <h3 class="h5 card-title">Decision Tree</h3>
+          <p class="card-text text-muted small flex-grow-1">
+            Approve or deny a credit card application from four applicant features &mdash; a
+            flowchart of rules learned from the data.
+          </p>
+          <div class="d-flex gap-2 flex-wrap">
+            <a routerLink="/decision-tree/concepts" class="btn btn-outline-primary btn-sm">Concepts</a>
+            <a routerLink="/decision-tree/application" class="btn btn-primary btn-sm">Application</a>
+            <a routerLink="/decision-tree/metrics" class="btn btn-outline-primary btn-sm">Metrics</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -75,19 +124,20 @@
       <div class="row align-items-center g-3">
         <div class="col-md-8">
           <span class="badge text-bg-primary mb-2">Supervised Learning</span>
-          <h2 class="h4">Simple Linear Regression, end to end</h2>
+          <h2 class="h4">From regression to classification</h2>
           <p class="mb-0 text-muted">
-            See the problem framing, the two quantitative variables, the 500-record dataset, a
-            scatter plot with the fitted regression line, and an interactive form whose
-            predictions come straight from a trained scikit-learn model.
+            Every model follows the same pipeline: a CSV dataset loaded with pandas, an 80/20
+            train/test split, a scikit-learn model, and predictions served through an interactive
+            form. The classifiers add a confusion matrix with Accuracy, Precision, Recall and F1,
+            plus a side-by-side comparison of the two models.
           </p>
         </div>
         <div class="col-md-4 text-md-end">
-          <a routerLink="/linear-regression/concepts" class="btn btn-outline-primary mb-2 w-100 w-md-auto">
+          <a routerLink="/logistic-regression/concepts" class="btn btn-outline-primary mb-2 w-100 w-md-auto">
             Read the concepts
           </a>
-          <a routerLink="/linear-regression/application" class="btn btn-primary w-100 w-md-auto">
-            Open the application
+          <a routerLink="/decision-tree/metrics" class="btn btn-primary w-100 w-md-auto">
+            Compare the models
           </a>
         </div>
       </div>
