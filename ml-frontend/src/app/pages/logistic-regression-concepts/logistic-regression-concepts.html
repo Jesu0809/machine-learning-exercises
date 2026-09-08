@@ -1,0 +1,169 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Logistic Regression &mdash; Concepts</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>Logistic Regression: Concepts</h1>
+    <p class="lead">
+      The ideas needed to understand Binary Logistic Regression before using the interactive
+      classifier on the Application page.
+    </p>
+  </div>
+
+  <div class="accordion" id="lrConceptsAccordion">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#lc1">
+          What is Logistic Regression?
+        </button>
+      </h2>
+      <div id="lc1" class="accordion-collapse collapse show" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          A supervised algorithm that estimates the probability that an observation belongs to a
+          class. It builds a linear combination of the inputs and passes it through the sigmoid
+          function, so the output is always a number between 0 and 1.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc2">
+          Why is it considered a classification algorithm?
+        </button>
+      </h2>
+      <div id="lc2" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Although it fits a line internally, its output is a probability that is turned into a
+          category by comparing it with a threshold. It predicts a discrete class, not a
+          continuous value, so it is a classifier.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc3">
+          What is binary classification?
+        </button>
+      </h2>
+      <div id="lc3" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Assigning each observation to one of exactly two classes, usually coded as 0 and 1.
+          In this project: <code>0 = Low Risk</code> (repaid on time) and
+          <code>1 = High Risk</code> (defaulted).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc4">
+          Independent variable (X)
+        </button>
+      </h2>
+      <div id="lc4" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          The input used to make the prediction. Here it is the borrower's
+          <strong>debt-to-income ratio</strong>, measured in percent.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc5">
+          Dependent or target variable (y)
+        </button>
+      </h2>
+      <div id="lc5" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          The value the model tries to predict: <code>defaulted</code>. It takes two values,
+          0 (the loan was repaid on time) and 1 (the borrower defaulted).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc6">
+          Classes or labels
+        </button>
+      </h2>
+      <div id="lc6" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          The possible values of the target variable. This model has two labels: 0 = Low Risk
+          and 1 = High Risk. The model always returns one of them.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc7">
+          Probability of belonging to a class
+        </button>
+      </h2>
+      <div id="lc7" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Before choosing a label, the model produces a probability between 0 and 1 (the sigmoid
+          output). A value of 0.8 means the model estimates an 80% chance that the observation
+          belongs to class 1 (High Risk).
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc8">
+          Classification threshold
+        </button>
+      </h2>
+      <div id="lc8" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          The cut-off applied to the probability. With the default threshold of 0.5, a
+          probability of 0.5 or more is labelled class 1, and anything below 0.5 is labelled
+          class 0.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lc9">
+          Difference between Linear Regression and Logistic Regression
+        </button>
+      </h2>
+      <div id="lc9" class="accordion-collapse collapse" data-bs-parent="#lrConceptsAccordion">
+        <div class="accordion-body">
+          Linear Regression predicts a continuous number and its output has no bounds; it fits a
+          straight line. Logistic Regression predicts a probability between 0 and 1 that is then
+          turned into a class; it fits an S-shaped sigmoid curve.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+      <h2 class="h5">The sigmoid function</h2>
+      <p class="text-muted mb-2">
+        Logistic Regression maps any real number <code>z</code> (the linear combination of the
+        inputs) to a probability with <code>p = 1 / (1 + e<sup>-z</sup>)</code>. The dashed line
+        marks the 0.5 threshold.
+      </p>
+      <img [src]="'/api/logreg/sigmoid-plot'" class="img-fluid"
+           alt="Sigmoid curve going from 0 to 1 with a threshold marked at 0.5">
+    </div>
+  </div>
+
+  <a routerLink="/logistic-regression/application" class="btn btn-primary mt-4">
+    Try the classifier &rarr;
+  </a>
+</div>
