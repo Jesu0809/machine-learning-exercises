@@ -9,6 +9,12 @@ import { UseCase3 } from './pages/use-case-3/use-case-3';
 import { UseCase4 } from './pages/use-case-4/use-case-4';
 import { LinearRegressionConcepts } from './pages/linear-regression-concepts/linear-regression-concepts';
 import { LinearRegressionApplication } from './pages/linear-regression-application/linear-regression-application';
+import { LogisticRegressionConcepts } from './pages/logistic-regression-concepts/logistic-regression-concepts';
+import { LogisticRegressionApplication } from './pages/logistic-regression-application/logistic-regression-application';
+import { LogisticRegressionMetrics } from './pages/logistic-regression-metrics/logistic-regression-metrics';
+import { DecisionTreeConcepts } from './pages/decision-tree-concepts/decision-tree-concepts';
+import { DecisionTreeApplication } from './pages/decision-tree-application/decision-tree-application';
+import { DecisionTreeMetrics } from './pages/decision-tree-metrics/decision-tree-metrics';
 import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
@@ -22,5 +28,11 @@ export const routes: Routes = [
   { path: 'use-cases/4', component: UseCase4 },
   { path: 'linear-regression/concepts', component: LinearRegressionConcepts },
   { path: 'linear-regression/application', component: LinearRegressionApplication },
+  { path: 'logistic-regression/concepts', component: LogisticRegressionConcepts },
+  { path: 'logistic-regression/application', component: LogisticRegressionApplication },
+  { path: 'logistic-regression/metrics', component: LogisticRegressionMetrics },
+  { path: 'decision-tree/concepts', component: DecisionTreeConcepts },
+  { path: 'decision-tree/application', component: DecisionTreeApplication },
+  { path: 'decision-tree/metrics', component: DecisionTreeMetrics },
   { path: '**', component: NotFound },
 ];

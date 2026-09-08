@@ -1,0 +1,119 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/logistic-regression/concepts">Logistic Regression</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Evaluation Metrics</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>Logistic Regression: Evaluation Metrics</h1>
+    <p class="lead">
+      The model is evaluated on the 20% of records that were never used for training.
+    </p>
+  </div>
+
+  @if (metrics(); as m) {
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h2 class="h5">Confusion Matrix</h2>
+        <p class="text-muted">
+          Rows are the real class, columns are the predicted class, on the
+          {{ m.testRecords }} test records.
+        </p>
+        <div class="row g-4 align-items-center">
+          <div class="col-md-6">
+            <img [src]="confusionPlotUrl" class="img-fluid"
+                 alt="Confusion matrix heatmap with true negatives, false positives, false negatives and true positives">
+          </div>
+          <div class="col-md-6">
+            <table class="table table-sm align-middle mb-0">
+              <tbody>
+                <tr>
+                  <th>True Negatives (TN)</th>
+                  <td>{{ m.confusionMatrix.trueNegatives }}</td>
+                  <td class="text-muted small">Low Risk borrowers correctly classified as Low Risk</td>
+                </tr>
+                <tr>
+                  <th>False Positives (FP)</th>
+                  <td>{{ m.confusionMatrix.falsePositives }}</td>
+                  <td class="text-muted small">Low Risk borrowers wrongly flagged as High Risk</td>
+                </tr>
+                <tr>
+                  <th>False Negatives (FN)</th>
+                  <td>{{ m.confusionMatrix.falseNegatives }}</td>
+                  <td class="text-muted small">High Risk borrowers missed and classified as Low Risk</td>
+                </tr>
+                <tr>
+                  <th>True Positives (TP)</th>
+                  <td>{{ m.confusionMatrix.truePositives }}</td>
+                  <td class="text-muted small">High Risk borrowers correctly classified as High Risk</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="mt-3 mb-0">
+          <strong>Interpretation.</strong> The model gets most cases right: TN and TP dominate the
+          matrix. The {{ m.confusionMatrix.falseNegatives }} false negatives are the costliest
+          errors here &mdash; borrowers who defaulted but were approved as Low Risk &mdash; while
+          the {{ m.confusionMatrix.falsePositives }} false positives only mean a safe borrower was
+          rejected.
+        </p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h2 class="h5">Classification Metrics</h2>
+        <div class="row g-2">
+          <div class="col-6 col-lg-3">
+            <div class="stat-tile">
+              <div class="stat-value">{{ m.accuracy | percent:'1.1-1' }}</div>
+              <div class="stat-label">Accuracy</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-tile">
+              <div class="stat-value">{{ m.precision | percent:'1.1-1' }}</div>
+              <div class="stat-label">Precision</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-tile">
+              <div class="stat-value">{{ m.recall | percent:'1.1-1' }}</div>
+              <div class="stat-label">Recall</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-tile">
+              <div class="stat-value">{{ m.f1Score | number:'1.3-3' }}</div>
+              <div class="stat-label">F1-score</div>
+            </div>
+          </div>
+        </div>
+        <ul class="small text-muted mt-3 mb-2">
+          <li><strong>Accuracy</strong> &mdash; share of all test borrowers classified correctly.</li>
+          <li><strong>Precision</strong> &mdash; of those flagged High Risk, how many really defaulted.</li>
+          <li><strong>Recall</strong> &mdash; of the borrowers who really defaulted, how many the model caught.</li>
+          <li><strong>F1-score</strong> &mdash; harmonic mean of precision and recall.</li>
+        </ul>
+        <p class="mb-0">
+          <strong>Interpretation.</strong> With accuracy around
+          {{ m.accuracy | percent:'1.0-0' }} and precision and recall both close to it, the model
+          performs well and in a balanced way: it does not achieve its accuracy by ignoring one of
+          the two classes.
+        </p>
+      </div>
+    </div>
+  } @else {
+    <p class="text-muted">
+      <span class="spinner-border spinner-border-sm me-1"></span> Loading metrics&hellip;
+    </p>
+  }
+
+  <a routerLink="/decision-tree/metrics" class="btn btn-outline-primary">
+    Compare with the Decision Tree &rarr;
+  </a>
+</div>
