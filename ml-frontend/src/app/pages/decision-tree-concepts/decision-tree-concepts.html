@@ -1,0 +1,128 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Decision Tree &mdash; Concepts</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>Decision Tree: Concepts</h1>
+    <p class="lead">
+      The classification algorithm assigned to this group, explained before its implementation on
+      the Application page.
+    </p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Name and definition</h2>
+          <p class="card-text mb-0">
+            A <strong>Decision Tree</strong> is a supervised model that classifies an observation
+            by asking a sequence of yes/no questions about its features until it reaches a leaf
+            node that holds a class.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">How the algorithm works</h2>
+          <p class="card-text mb-0">
+            During training it searches, at each node, for the feature and cut-off value that best
+            separate the classes (measured with Gini impurity), splits the data in two, and
+            repeats on each branch until a stopping rule is met &mdash; here a maximum depth of 4.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Types of problems it can solve</h2>
+          <p class="card-text mb-0">
+            Binary and multi-class classification, and also regression. It works with numeric and
+            categorical features and does not need feature scaling.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Main characteristics</h2>
+          <ul class="mb-0">
+            <li>A flowchart of <code>if / else</code> rules over the features.</li>
+            <li>Every prediction can be traced from the root to a single leaf.</li>
+            <li>No feature scaling or normalisation required.</li>
+            <li>Produces a ranking of feature importance.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Advantages</h2>
+          <ul class="mb-0">
+            <li>Easy to read, explain and visualise.</li>
+            <li>Fast to train and to predict.</li>
+            <li>Captures non-linear relationships between features and class.</li>
+            <li>Handles features on different scales without preprocessing.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Limitations</h2>
+          <ul class="mb-0">
+            <li>A deep tree overfits: it memorises the training data and generalises poorly.</li>
+            <li>Small changes in the data can produce a very different tree.</li>
+            <li>Usually less accurate than ensembles such as Random Forest.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 card-title">Example of a real-world classification problem</h2>
+          <p class="card-text mb-0">
+            Deciding whether to <strong>approve or deny a credit card application</strong> from the
+            applicant's annual income, debt-to-income ratio, credit history length and number of
+            open credit lines &mdash; exactly the problem implemented on the Application page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+      <h2 class="h5">The trained tree</h2>
+      <p class="text-muted mb-2">
+        Each box is a question about one feature; following the branches from the top to a leaf
+        gives the predicted class.
+      </p>
+      <div class="table-responsive">
+        <img [src]="'/api/tree/tree-plot'" class="img-fluid"
+             alt="Diagram of the trained decision tree with its split questions and leaf classes">
+      </div>
+    </div>
+  </div>
+
+  <a routerLink="/decision-tree/application" class="btn btn-primary mt-4">
+    Try the classifier &rarr;
+  </a>
+</div>
