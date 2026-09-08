@@ -2,6 +2,7 @@ import os
 import math
 from flask import Flask, jsonify, request, send_from_directory, Response
 import LinearRegression
+import LogisticRegressionModel
 
 app = Flask(__name__)
 
@@ -67,6 +68,77 @@ def salary_data():
 
     records = [
         {"years": row["Years of Experience"], "salary": row["Monthly Salary (COP)"]}
+        for _, row in page_df.iterrows()
+    ]
+
+    return jsonify({
+        "records": records,
+        "page": page,
+        "limit": limit,
+        "totalRecords": total_records,
+        "totalPages": total_pages
+    })
+
+@app.route("/api/logreg/classify", methods=["POST"])
+def logreg_classify():
+    data = request.get_json(silent=True) or {}
+    try:
+        ratio = float(data["ratio"])
+    except (KeyError, TypeError, ValueError):
+        return jsonify({"error": "A numeric 'ratio' value is required."}), 400
+    return jsonify(LogisticRegressionModel.classify(ratio))
+
+@app.route("/api/logreg/model-info", methods=["GET"])
+def logreg_model_info():
+    return jsonify(LogisticRegressionModel.getModelInfo())
+
+@app.route("/api/logreg/metrics", methods=["GET"])
+def logreg_metrics():
+    return jsonify(LogisticRegressionModel.getMetrics())
+
+@app.route("/api/logreg/scatter-plot")
+def logreg_scatter_plot():
+    predict_raw = request.args.get("predict")
+    predict_x = None
+    if predict_raw not in (None, ""):
+        try:
+            predict_x = float(predict_raw)
+        except ValueError:
+            predict_x = None
+    image_bytes = LogisticRegressionModel.generateScatterPlot(predict_x)
+    return Response(image_bytes, mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
+
+@app.route("/api/logreg/confusion-plot")
+def logreg_confusion_plot():
+    image_bytes = LogisticRegressionModel.generateConfusionMatrixPlot()
+    return Response(image_bytes, mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
+
+@app.route("/api/logreg/sigmoid-plot")
+def logreg_sigmoid_plot():
+    image_bytes = LogisticRegressionModel.generateSigmoidPlot()
+    return Response(image_bytes, mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
+
+@app.route("/api/logreg/dataset", methods=["GET"])
+def logreg_dataset():
+    df = LogisticRegressionModel.df
+    total_records = len(df)
+
+    limit = int(request.args.get("limit", 20))
+    limit = max(1, limit)
+
+    total_pages = max(1, math.ceil(total_records / limit))
+
+    page = int(request.args.get("page", 1))
+    page = max(1, min(page, total_pages))
+
+    start = (page - 1) * limit
+    page_df = df.iloc[start:start + limit]
+
+    records = [
+        {"ratio": row["debt_to_income_ratio"], "defaulted": int(row["defaulted"])}
         for _, row in page_df.iterrows()
     ]
 
