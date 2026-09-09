@@ -141,10 +141,21 @@
               min="0"
               inputmode="decimal"
               [placeholder]="field.placeholder"
+              [attr.max]="field.max ?? null"
               class="form-control"
               [class.is-invalid]="control(field.key)?.invalid && control(field.key)?.touched"
             >
-            <div class="invalid-feedback">Please enter a valid value.</div>
+            <div class="invalid-feedback">
+              @if (control(field.key)?.errors?.['required']) {
+                Please enter a value.
+              } @else if (control(field.key)?.errors?.['max']) {
+                Please enter a value of at most {{ field.max }}.
+              } @else if (control(field.key)?.errors?.['min']) {
+                Please enter a value of at least 0.
+              } @else {
+                Please enter a valid value.
+              }
+            </div>
           </div>
         }
         <div class="col-12">

@@ -28,14 +28,14 @@ export class DecisionTreeApplication implements OnInit {
       null as number | null,
       [Validators.required, Validators.min(0), Validators.max(100)],
     ],
-    credit_history_length: [null as number | null, [Validators.required, Validators.min(0)]],
+    credit_history_length: [null as number | null, [Validators.required, Validators.min(0), Validators.max(100)]],
     open_credit_lines: [null as number | null, [Validators.required, Validators.min(0)]],
   });
 
-  public readonly fields: { key: keyof TreeInput; label: string; unit: string; placeholder: string }[] = [
+  public readonly fields: { key: keyof TreeInput; label: string; unit: string; placeholder: string; max?: number }[] = [
     { key: 'annual_income', label: 'Annual income', unit: 'USD', placeholder: 'e.g. 90000' },
-    { key: 'debt_to_income_ratio', label: 'Debt-to-income ratio', unit: '%', placeholder: 'e.g. 18' },
-    { key: 'credit_history_length', label: 'Credit history length', unit: 'years', placeholder: 'e.g. 12' },
+    { key: 'debt_to_income_ratio', label: 'Debt-to-income ratio', unit: '%', placeholder: 'e.g. 18', max: 100 },
+    { key: 'credit_history_length', label: 'Credit history length', unit: 'years', placeholder: 'e.g. 12', max: 100 },
     { key: 'open_credit_lines', label: 'Open credit lines', unit: 'count', placeholder: 'e.g. 3' },
   ];
 
