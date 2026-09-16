@@ -4,6 +4,7 @@ from flask import Flask, jsonify, request, send_from_directory, Response
 import LinearRegression
 import LogisticRegressionModel
 import DecisionTreeModel
+import ClusteringModel
 
 app = Flask(__name__)
 
@@ -232,6 +233,80 @@ def tree_dataset():
         "totalRecords": total_records,
         "totalPages": total_pages
     })
+
+CLUSTER_FIELDS = ("annual_income", "debt_to_income_ratio",
+                  "credit_history_length", "open_credit_lines")
+
+@app.route("/api/clustering/predict", methods=["POST"])
+def clustering_predict():
+    data = request.get_json(silent=True) or {}
+    try:
+        values = {field: float(data[field]) for field in CLUSTER_FIELDS}
+    except (KeyError, TypeError, ValueError):
+        return jsonify({"error": "All four numeric fields are required."}), 400
+    return jsonify(ClusteringModel.predict(values))
+
+@app.route("/api/clustering/model-info", methods=["GET"])
+def clustering_model_info():
+    return jsonify(ClusteringModel.getModelInfo())
+
+@app.route("/api/clustering/metrics", methods=["GET"])
+def clustering_metrics():
+    return jsonify(ClusteringModel.getMetrics())
+
+@app.route("/api/clustering/scatter-plot")
+def clustering_scatter_plot():
+    highlight = None
+    if all(request.args.get(f) not in (None, "") for f in CLUSTER_FIELDS):
+        try:
+            highlight = {f: float(request.args.get(f)) for f in CLUSTER_FIELDS}
+        except ValueError:
+            highlight = None
+    image_bytes = ClusteringModel.generateScatterPlot(highlight)
+    return Response(image_bytes, mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
+
+@app.route("/api/clustering/elbow-plot")
+def clustering_elbow_plot():
+    return Response(ClusteringModel.generateElbowPlot(),
+                    mimetype="image/png", headers={"Cache-Control": "no-store"})
+
+@app.route("/api/clustering/dataset", methods=["GET"])
+def clustering_dataset():
+    df = ClusteringModel.df
+    total_records = len(df)
+
+    limit = int(request.args.get("limit", 20))
+    limit = max(1, limit)
+
+    total_pages = max(1, math.ceil(total_records / limit))
+
+    page = int(request.args.get("page", 1))
+    page = max(1, min(page, total_pages))
+
+    start = (page - 1) * limit
+    page_df = df.iloc[start:start + limit]
+
+    records = [
+        {
+            "annual_income": int(row["annual_income"]),
+            "debt_to_income_ratio": row["debt_to_income_ratio"],
+            "credit_history_length": row["credit_history_length"],
+            "open_credit_lines": int(row["open_credit_lines"]),
+            "approved": int(row["approved"]),
+            "cluster": int(row["cluster"]),
+        }
+        for _, row in page_df.iterrows()
+    ]
+
+    return jsonify({
+        "records": records,
+        "page": page,
+        "limit": limit,
+        "totalRecords": total_records,
+        "totalPages": total_pages
+    })
+
 
 @app.route("/")
 @app.route("/<path:filename>")
