@@ -15,6 +15,7 @@ import { LogisticRegressionMetrics } from './pages/logistic-regression-metrics/l
 import { DecisionTreeConcepts } from './pages/decision-tree-concepts/decision-tree-concepts';
 import { DecisionTreeApplication } from './pages/decision-tree-application/decision-tree-application';
 import { DecisionTreeMetrics } from './pages/decision-tree-metrics/decision-tree-metrics';
+import { ClusteringComponent } from './pages/clustering/clustering.component';
 import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
@@ -34,5 +35,6 @@ export const routes: Routes = [
   { path: 'decision-tree/concepts', component: DecisionTreeConcepts },
   { path: 'decision-tree/application', component: DecisionTreeApplication },
   { path: 'decision-tree/metrics', component: DecisionTreeMetrics },
+  { path: 'clustering/application', component: ClusteringComponent },
   { path: '**', component: NotFound },
 ];
