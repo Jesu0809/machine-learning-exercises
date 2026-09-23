@@ -8,6 +8,10 @@ import {
   ClusterMetrics,
   ClusterRecord,
   ClusterResult,
+  ManualClusteringContext,
+  ManualCentroid,
+  ManualIteration,
+  ManualVarianceComparison,
 } from '../models/clustering.model';
 
 @Injectable({ providedIn: 'root' })
@@ -44,5 +48,33 @@ export class ClusteringService {
 
   elbowPlotUrl(): string {
     return '/api/clustering/elbow-plot';
+  }
+
+  getManualContext(): Observable<ManualClusteringContext> {
+    return this.http.get<ManualClusteringContext>('/api/manual-clustering/context');
+  }
+
+  getManualInitialCentroids(): Observable<ManualCentroid[]> {
+    return this.http.get<ManualCentroid[]>('/api/manual-clustering/initial-centroids');
+  }
+
+  getManualIteration(n: number): Observable<ManualIteration> {
+    return this.http.get<ManualIteration>(`/api/manual-clustering/iteration/${n}`);
+  }
+
+  getManualVariance(): Observable<ManualVarianceComparison> {
+    return this.http.get<ManualVarianceComparison>('/api/manual-clustering/variance');
+  }
+
+  manualInitialPlotUrl(): string {
+    return '/api/manual-clustering/initial-plot';
+  }
+
+  manualIterationPlotUrl(n: number): string {
+    return `/api/manual-clustering/iteration-plot/${n}`;
+  }
+
+  manualVariancePlotUrl(): string {
+    return '/api/manual-clustering/variance-plot';
   }
 }

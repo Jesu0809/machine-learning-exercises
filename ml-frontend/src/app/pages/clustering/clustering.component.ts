@@ -52,6 +52,24 @@ export class ClusteringComponent implements OnInit {
       .sort((a, b) => a - b);
   });
 
+  public readonly silhouetteInterpretation = computed(() => {
+    const info = this.modelInfo();
+    if (!info) {
+      return '';
+    }
+    const score = info.silhouetteScore;
+    if (score >= 0.7) {
+      return 'a strong, well-separated cluster structure';
+    }
+    if (score >= 0.5) {
+      return 'a reasonable cluster structure with some overlap between neighboring clusters';
+    }
+    if (score >= 0.25) {
+      return 'a weak but present cluster structure, with visible overlap between clusters';
+    }
+    return 'little real geometric separation between clusters: they overlap substantially in feature space, even though they still line up with meaningfully different outcomes';
+  });
+
   limitOptions = [10, 20, 50, 100];
   limit = 20;
   page = signal(1);
