@@ -16,6 +16,8 @@ import { DecisionTreeConcepts } from './pages/decision-tree-concepts/decision-tr
 import { DecisionTreeApplication } from './pages/decision-tree-application/decision-tree-application';
 import { DecisionTreeMetrics } from './pages/decision-tree-metrics/decision-tree-metrics';
 import { ClusteringComponent } from './pages/clustering/clustering.component';
+import { ClusteringConcepts } from './pages/clustering-concepts/clustering-concepts';
+import { ClusteringManualExercise } from './pages/clustering-manual-exercise/clustering-manual-exercise';
 import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
@@ -35,6 +37,8 @@ export const routes: Routes = [
   { path: 'decision-tree/concepts', component: DecisionTreeConcepts },
   { path: 'decision-tree/application', component: DecisionTreeApplication },
   { path: 'decision-tree/metrics', component: DecisionTreeMetrics },
+  { path: 'clustering/concepts', component: ClusteringConcepts },
+  { path: 'clustering/manual-exercise', component: ClusteringManualExercise },
   { path: 'clustering/application', component: ClusteringComponent },
   { path: '**', component: NotFound },
 ];

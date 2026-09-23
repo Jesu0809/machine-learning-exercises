@@ -71,6 +71,14 @@
             </div>
           </div>
         </div>
+        <p class="text-muted small mt-3 mb-0">
+          <strong>Interpreting the silhouette score.</strong> It ranges from -1 to 1 and measures
+          how much closer each record is to its own cluster than to the next closest one. Scores
+          above 0.5 suggest strong separation, 0.25&ndash;0.5 a reasonable structure, and below
+          0.25 a weak one. A score of {{ info.silhouetteScore | number:'1.2-2' }} here points to
+          {{ silhouetteInterpretation() }}, which is expected for continuous financial variables
+          that naturally blend into each other rather than forming isolated groups.
+        </p>
       }
     </div>
   </div>

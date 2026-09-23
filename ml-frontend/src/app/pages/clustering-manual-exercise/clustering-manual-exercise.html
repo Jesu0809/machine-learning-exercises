@@ -1,0 +1,225 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/clustering/concepts">Unsupervised Machine Learning</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Manual Exercise</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>K-Means: Manual Exercise</h1>
+    <p class="lead">
+      A step-by-step run of K-Means computed by hand with plain distance formulas, 3 fixed
+      starting centroids and 3 iterations &mdash; no scikit-learn involved.
+    </p>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">1. Dataset and Context</h2>
+      @if (context(); as ctx) {
+        <p class="mb-2">
+          The same credit-risk topic used across this project, reduced to a small, hand-sized
+          dataset so every step of the algorithm can be shown in a table. Each record is one
+          credit applicant described by two numeric variables: the debt-to-income ratio (how much
+          of a person's income goes to debt payments) and their annual income in thousands of
+          US dollars. These two variables alone already separate applicants into rough risk bands,
+          which is what the exercise below tries to recover.
+        </p>
+        <ul class="list-unstyled mb-0">
+          <li><strong>Records:</strong> {{ ctx.records }}</li>
+          <li><strong>Variable X:</strong> {{ ctx.featureX }} ({{ ctx.featureXUnit }})</li>
+          <li><strong>Variable Y:</strong> {{ ctx.featureY }} ({{ ctx.featureYUnit }})</li>
+          <li><strong>Number of clusters (k):</strong> {{ ctx.k }}</li>
+          <li><strong>Source:</strong> {{ ctx.source }}</li>
+        </ul>
+      }
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">2. Initial Centroids</h2>
+      <p class="text-muted">
+        Three starting points were picked by hand to roughly span the data: a low-risk corner
+        (low ratio, high income), a middle point, and a high-risk corner (high ratio, low income).
+      </p>
+      <div class="table-responsive mb-3">
+        <table class="table table-sm align-middle mb-0">
+          <thead>
+            <tr><th>Cluster</th><th>Debt-to-income ratio (%)</th><th>Annual income (thousand USD)</th></tr>
+          </thead>
+          <tbody>
+            @for (c of initialCentroids(); track c.cluster) {
+              <tr>
+                <td>{{ c.cluster }}</td>
+                <td>{{ c.debt_to_income_ratio }}</td>
+                <td>{{ c.annual_income_k }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <img [src]="initialPlotUrl" class="img-fluid"
+           alt="Scatter plot of the 100 records with the 3 initial centroids marked">
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">3. Iterations</h2>
+      <p class="text-muted mb-3">
+        Each iteration repeats the same three steps: compute the Euclidean distance from every
+        record to the 3 centroids, assign each record to its nearest centroid, then recompute
+        each centroid as the average of the records now assigned to it.
+      </p>
+
+      <div class="btn-group mb-3" role="group">
+        @for (n of iterationNumbers; track n) {
+          <button type="button" class="btn"
+                  [class.btn-primary]="activeIteration() === n"
+                  [class.btn-outline-primary]="activeIteration() !== n"
+                  (click)="selectIteration(n)">
+            Iteration {{ n }}
+          </button>
+        }
+      </div>
+
+      @if (activeIterationData(); as it) {
+        <div class="row g-4 mb-3">
+          <div class="col-lg-6">
+            <h3 class="h6">Updated centroids after iteration {{ it.iteration }}</h3>
+            <table class="table table-sm align-middle mb-3">
+              <thead>
+                <tr><th>Cluster</th><th>Name</th><th>Size</th><th>Ratio (%)</th><th>Income (k)</th><th>Variance</th></tr>
+              </thead>
+              <tbody>
+                @for (c of it.centroidsAfter; track c.cluster) {
+                  <tr>
+                    <td>{{ c.cluster }}</td>
+                    <td>{{ c.name }}</td>
+                    <td>{{ it.clusterSizes[c.cluster] }}</td>
+                    <td>{{ c.debt_to_income_ratio | number:'1.2-2' }}</td>
+                    <td>{{ c.annual_income_k | number:'1.2-2' }}</td>
+                    <td>{{ it.variance[c.cluster] | number:'1.1-1' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="col-lg-6">
+            <img [src]="iterationPlotUrl(it.iteration)" class="img-fluid"
+                 [alt]="'Scatter plot for iteration ' + it.iteration + ' with cluster colors and updated centroids'">
+          </div>
+        </div>
+
+        <h3 class="h6">Distances and assignments (record by record)</h3>
+        <div class="table-responsive">
+          <table class="table table-striped table-sm align-middle mb-0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Ratio (%)</th>
+                <th>Income (k)</th>
+                <th>Dist. to 0</th>
+                <th>Dist. to 1</th>
+                <th>Dist. to 2</th>
+                <th>Assigned</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of pagedRecords(); track r.index) {
+                <tr>
+                  <td>{{ r.index + 1 }}</td>
+                  <td>{{ r.debt_to_income_ratio }}</td>
+                  <td>{{ r.annual_income_k }}</td>
+                  <td>{{ r.distanceToCluster0 | number:'1.2-2' }}</td>
+                  <td>{{ r.distanceToCluster1 | number:'1.2-2' }}</td>
+                  <td>{{ r.distanceToCluster2 | number:'1.2-2' }}</td>
+                  <td>{{ r.assignedCluster }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <span class="text-muted small">Showing {{ rangeStart() }}&ndash;{{ rangeEnd() }} of {{ it.records.length }} records</span>
+          <div class="d-flex align-items-center gap-3">
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="previousPage()" [disabled]="tablePage() <= 1">Previous</button>
+            <span>Page {{ tablePage() }} of {{ totalTablePages() }}</span>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="nextPage()" [disabled]="tablePage() >= totalTablePages()">Next</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">4. Variance Comparison Across Iterations</h2>
+      <p class="text-muted">
+        Within-cluster variance measures how spread out the records inside a cluster still are
+        around its centroid. A shrinking variance means the cluster is tightening around a
+        consistent group of similar records.
+      </p>
+      @if (variance(); as v) {
+        <div class="table-responsive mb-3">
+          <table class="table table-sm align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Iteration</th>
+                <th>0 = Low risk</th>
+                <th>1 = Moderate risk</th>
+                <th>2 = High risk</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (iter of v.iterations; track iter; let i = $index) {
+                <tr>
+                  <td>{{ iter }}</td>
+                  <td>{{ v.varianceByCluster[0][i] | number:'1.1-1' }}</td>
+                  <td>{{ v.varianceByCluster[1][i] | number:'1.1-1' }}</td>
+                  <td>{{ v.varianceByCluster[2][i] | number:'1.1-1' }}</td>
+                  <td>{{ v.totalVariance[i] | number:'1.1-1' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+      <img [src]="variancePlotUrl" class="img-fluid"
+           alt="Line chart of within-cluster variance for each cluster across the 3 iterations">
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="h5">5. Final Result and Cluster Characteristics</h2>
+      <p class="mb-2">
+        By iteration 3 the assignments have mostly settled. Cluster 0 (Low risk) converges
+        immediately after iteration 1 and never changes again: it groups applicants with a low
+        debt-to-income ratio and high income, and its variance stays flat because that group is
+        naturally well separated from the rest of the data.
+      </p>
+      <p class="mb-2">
+        Clusters 1 (Moderate risk) and 2 (High risk) keep exchanging a handful of borderline
+        applicants between iterations 1 and 3: cluster 2's variance rises slightly as it absorbs
+        points from the edge of cluster 1, while cluster 1's variance falls as it keeps its more
+        central, consistent members. This is expected where two risk bands sit next to each other
+        on a continuous scale rather than being cleanly separated.
+      </p>
+      <p class="mb-0">
+        The final grouping is interpretable: applicants with a low ratio and high income form a
+        low-risk group, applicants with a high ratio and low income form a high-risk group, and
+        everyone in between forms a moderate-risk group. This matches the same three risk profiles
+        used later, with real data, on the Application page.
+      </p>
+    </div>
+  </div>
+
+  <a routerLink="/clustering/application" class="btn btn-primary mt-4">
+    See it with scikit-learn and real data &rarr;
+  </a>
+</div>
