@@ -10,7 +10,7 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
 CSV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                        "data", "credit_approval.csv")
+                        "data", "credit_risk_clustering.csv")
 df = pd.read_csv(CSV_PATH)
 
 FEATURES = ["annual_income", "debt_to_income_ratio",
@@ -96,8 +96,13 @@ def getModelInfo():
         },
         "silhouetteScore": SILHOUETTE,
         "inertia": float(model.inertia_),
+<<<<<<< HEAD
         "source": "Same synthetic dataset used by the Decision Tree activity "
                   "(data/generate_datasets.py), read from data/credit_approval.csv, "
+=======
+        "source": "Synthetic dataset generated for this activity "
+                  "(data/generate_datasets.py), read from data/credit_risk_clustering.csv, "
+>>>>>>> 88e3dfa369317a2a4c101b82685973e7d47ca7fc
                   "clustered without using the 'approved' column.",
     }
 

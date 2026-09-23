@@ -5,6 +5,10 @@ import LinearRegression
 import LogisticRegressionModel
 import DecisionTreeModel
 import ClusteringModel
+<<<<<<< HEAD
+=======
+import ManualClustering
+>>>>>>> 88e3dfa369317a2a4c101b82685973e7d47ca7fc
 
 app = Flask(__name__)
 
@@ -307,6 +311,43 @@ def clustering_dataset():
         "totalPages": total_pages
     })
 
+<<<<<<< HEAD
+=======
+@app.route("/api/manual-clustering/context", methods=["GET"])
+def manual_clustering_context():
+    return jsonify(ManualClustering.getContext())
+
+@app.route("/api/manual-clustering/initial-centroids", methods=["GET"])
+def manual_clustering_initial_centroids():
+    return jsonify(ManualClustering.getInitialCentroids())
+
+@app.route("/api/manual-clustering/iteration/<int:n>", methods=["GET"])
+def manual_clustering_iteration(n):
+    if n < 1 or n > ManualClustering.N_ITERATIONS:
+        return jsonify({"error": f"n must be between 1 and {ManualClustering.N_ITERATIONS}."}), 400
+    return jsonify(ManualClustering.getIteration(n))
+
+@app.route("/api/manual-clustering/variance", methods=["GET"])
+def manual_clustering_variance():
+    return jsonify(ManualClustering.getVarianceComparison())
+
+@app.route("/api/manual-clustering/initial-plot")
+def manual_clustering_initial_plot():
+    return Response(ManualClustering.generateInitialPlot(), mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
+
+@app.route("/api/manual-clustering/iteration-plot/<int:n>")
+def manual_clustering_iteration_plot(n):
+    if n < 1 or n > ManualClustering.N_ITERATIONS:
+        return jsonify({"error": f"n must be between 1 and {ManualClustering.N_ITERATIONS}."}), 400
+    return Response(ManualClustering.generateIterationPlot(n), mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
+
+@app.route("/api/manual-clustering/variance-plot")
+def manual_clustering_variance_plot():
+    return Response(ManualClustering.generateVariancePlot(), mimetype="image/png",
+                    headers={"Cache-Control": "no-store"})
+>>>>>>> 88e3dfa369317a2a4c101b82685973e7d47ca7fc
 
 @app.route("/")
 @app.route("/<path:filename>")

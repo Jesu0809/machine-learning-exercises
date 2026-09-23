@@ -38,3 +38,47 @@ export interface ClusterMetrics {
   approvalRateByCluster: Record<string, number>;
   clusterNames: Record<string, string>;
 }
+
+export interface ManualClusteringContext {
+  records: number;
+  featureX: string;
+  featureXUnit: string;
+  featureY: string;
+  featureYUnit: string;
+  k: number;
+  iterations: number;
+  clusterNames: Record<string, string>;
+  source: string;
+}
+
+export interface ManualCentroid {
+  cluster: number;
+  name?: string;
+  debt_to_income_ratio: number;
+  annual_income_k: number;
+}
+
+export interface ManualRecord {
+  index: number;
+  debt_to_income_ratio: number;
+  annual_income_k: number;
+  distanceToCluster0: number;
+  distanceToCluster1: number;
+  distanceToCluster2: number;
+  assignedCluster: number;
+}
+
+export interface ManualIteration {
+  iteration: number;
+  records: ManualRecord[];
+  centroidsBefore: ManualCentroid[];
+  centroidsAfter: ManualCentroid[];
+  variance: Record<string, number>;
+  clusterSizes: Record<string, number>;
+}
+
+export interface ManualVarianceComparison {
+  iterations: number[];
+  varianceByCluster: Record<string, number[]>;
+  totalVariance: number[];
+}

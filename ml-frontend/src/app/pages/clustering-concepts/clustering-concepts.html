@@ -1,0 +1,131 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Unsupervised Machine Learning &mdash; Concepts</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>Unsupervised Machine Learning: Concepts</h1>
+    <p class="lead">
+      The ideas behind clustering and K-Means, before working through the manual simulation and
+      the interactive application.
+    </p>
+  </div>
+
+  <div class="accordion" id="clusteringConceptsAccordion">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cc1">
+          What is unsupervised learning?
+        </button>
+      </h2>
+      <div id="cc1" class="accordion-collapse collapse show" data-bs-parent="#clusteringConceptsAccordion">
+        <div class="accordion-body">
+          A type of machine learning where the data has no target variable and no labeled
+          answer to learn from. Instead of predicting a known outcome, the algorithm looks at the
+          inputs alone and finds patterns or structure in them. All the models used earlier in
+          this project (Linear Regression, Logistic Regression, the Decision Tree) are
+          supervised: they learn from a target. Clustering is unsupervised: there is no target
+          at all.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc2">
+          What is clustering?
+        </button>
+      </h2>
+      <div id="cc2" class="accordion-collapse collapse" data-bs-parent="#clusteringConceptsAccordion">
+        <div class="accordion-body">
+          Clustering groups observations so that records inside the same group are similar to
+          each other, and different from records in other groups, based only on their features.
+          Nobody tells the algorithm what the groups should mean; it discovers them from how the
+          points are distributed in space.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc3">
+          How K-Means works
+        </button>
+      </h2>
+      <div id="cc3" class="accordion-collapse collapse" data-bs-parent="#clusteringConceptsAccordion">
+        <div class="accordion-body">
+          K-Means splits the data into <i>k</i> groups by repeating four steps: place <i>k</i>
+          centroids, measure the distance from every record to each centroid, assign each record
+          to its nearest centroid, and move each centroid to the average position of the records
+          just assigned to it. Those four steps are repeated until the centroids stop moving by
+          much, which means the clusters have settled.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc4">
+          The role of centroids
+        </button>
+      </h2>
+      <div id="cc4" class="accordion-collapse collapse" data-bs-parent="#clusteringConceptsAccordion">
+        <div class="accordion-body">
+          A centroid is the center point of a cluster: the average of every feature over all the
+          records currently assigned to it. It is not necessarily one of the real records, just
+          the point that best summarizes where that group sits. Every record is labeled by
+          whichever centroid it is closest to, using the Euclidean distance.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc5">
+          The role of iterations
+        </button>
+      </h2>
+      <div id="cc5" class="accordion-collapse collapse" data-bs-parent="#clusteringConceptsAccordion">
+        <div class="accordion-body">
+          A single pass of assign-then-recompute is rarely enough, because moving the centroids
+          changes which records are now closest to them. Each iteration usually reassigns a few
+          borderline records and nudges the centroids a little further toward their true center.
+          The algorithm converges when an iteration no longer changes any assignment, or when a
+          fixed number of iterations has been reached.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cc6">
+          Choosing the number of clusters (k)
+        </button>
+      </h2>
+      <div id="cc6" class="accordion-collapse collapse" data-bs-parent="#clusteringConceptsAccordion">
+        <div class="accordion-body">
+          K-Means needs <i>k</i> to be chosen beforehand. One common way is the elbow method:
+          fit the model for several values of <i>k</i> and plot the inertia (how tight the
+          clusters are) against <i>k</i>. Inertia always drops as <i>k</i> grows, but past a
+          certain point it stops dropping by much, forming an elbow in the curve. That point is
+          a reasonable choice for <i>k</i>. The Application page in this project uses this method
+          to justify <i>k</i> = 3.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="d-flex flex-wrap gap-2 mt-4">
+    <a routerLink="/clustering/manual-exercise" class="btn btn-primary">
+      See the manual exercise &rarr;
+    </a>
+    <a routerLink="/clustering/application" class="btn btn-outline-primary">
+      Open the application &rarr;
+    </a>
+  </div>
+</div>
