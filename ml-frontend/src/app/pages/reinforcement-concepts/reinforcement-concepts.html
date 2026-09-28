@@ -1,0 +1,274 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Reinforcement Learning &mdash; Concepts</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>Reinforcement Learning: Concepts</h1>
+    <p class="lead">
+      Q-Learning with an incremental scikit-learn model, explained before the maze-solving
+      application.
+    </p>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <div class="fs-2" aria-hidden="true">🤖</div>
+          <h3 class="h6 mt-2 mb-0">Agent</h3>
+          <p class="small text-muted mb-0">Chooses the next move</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <div class="fs-2" aria-hidden="true">🗺️</div>
+          <h3 class="h6 mt-2 mb-0">Environment</h3>
+          <p class="small text-muted mb-0">The 10&times;10 maze and its rules</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <div class="fs-2" aria-hidden="true">🎯</div>
+          <h3 class="h6 mt-2 mb-0">Reward</h3>
+          <p class="small text-muted mb-0">Numeric feedback per move</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <div class="fs-2" aria-hidden="true">🧭</div>
+          <h3 class="h6 mt-2 mb-0">Policy</h3>
+          <p class="small text-muted mb-0">The learned decision rule</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">The agent-environment loop</h2>
+      <p class="text-muted mb-3">
+        Every step follows the same cycle, one state at a time.
+      </p>
+      <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 text-center">
+        <span class="badge text-bg-primary px-3 py-2">State s</span>
+        <span class="fs-4" aria-hidden="true">&rarr;</span>
+        <span class="badge text-bg-secondary px-3 py-2">Agent picks action a</span>
+        <span class="fs-4" aria-hidden="true">&rarr;</span>
+        <span class="badge text-bg-secondary px-3 py-2">Environment applies step()</span>
+        <span class="fs-4" aria-hidden="true">&rarr;</span>
+        <span class="badge text-bg-primary px-3 py-2">Reward r, next state s&prime;</span>
+        <span class="fs-4" aria-hidden="true">&rarr;</span>
+        <span class="badge text-bg-success px-3 py-2">Model learns from (s, a, r, s&prime;)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion mb-4" id="rlConceptsAccordion">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#rl1">
+          What is reinforcement learning?
+        </button>
+      </h2>
+      <div id="rl1" class="accordion-collapse collapse show" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          An agent takes actions and observes how the environment responds. A numeric reward
+          guides the learning, and the goal is to learn a policy that maximizes the expected
+          return over time. It is the third type of machine learning: supervised learning learns
+          from examples with a known answer, unsupervised learning finds patterns with no labels
+          at all, and reinforcement learning learns a sequence of decisions through interaction
+          and rewards.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl2">
+          Agent, environment and state
+        </button>
+      </h2>
+      <div id="rl2" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          The <b>agent</b> is the virtual robot choosing moves. The <b>environment</b> is the
+          fixed 10&times;10 maze, its walls, its danger zones and its movement rules. The
+          <b>state</b> <i>s</i> is the current position (row, column), with the first index at
+          zero.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl3">
+          Action, reward and policy
+        </button>
+      </h2>
+      <div id="rl3" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          An <b>action</b> <i>a</i> moves the agent up, down, left or right. The <b>reward</b>
+          <i>r</i> depends on what that move actually resulted in: a normal step, an attempt to
+          leave the grid, a wall hit, a step into a danger zone, or reaching the goal (see the
+          reward table below). A <b>policy</b> <i>&pi;</i> is the rule that decides which action
+          to take in each state.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl4">
+          Step, episode and experience
+        </button>
+      </h2>
+      <div id="rl4" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          A <b>step</b> is one action producing a new state and a reward. An <b>episode</b> is one
+          attempt from the start position until the goal or a step limit is reached. An
+          <b>experience</b> is the tuple (s, a, r, s&prime;) plus a flag saying whether that step
+          ended the episode.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl5">
+          Exploration and exploitation
+        </button>
+      </h2>
+      <div id="rl5" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          <b>Exploration</b> tries a random action to learn something new; <b>exploitation</b>
+          picks the action with the highest estimated value. The &epsilon;-greedy rule mixes both:
+          with probability &epsilon; the agent explores, and with probability 1 - &epsilon; it
+          exploits (even exploring can land on the best action by chance). Here &epsilon; starts
+          at 1.0 and decays by a factor of 0.995 after every episode down to a floor of 0.05, so
+          the agent explores a lot at first and mostly exploits once it has learned something.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl6">
+          Reward, return, penalty and discount
+        </button>
+      </h2>
+      <div id="rl6" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          The <b>immediate reward</b> is the result of a single transition. A <b>penalty</b> is
+          simply a negative reward: a signal that a move was undesirable, whether mild (a normal
+          step already costs something, to favor short paths) or severe (a wall hit, an off-grid
+          attempt, or entering a danger zone). The <b>return</b> combines the rewards obtained
+          from a point in time onward. The <b>discount</b> &gamma; controls how much weight the
+          future gets: a value close to 1 favors long-term reward. This project uses &gamma; =
+          0.95.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl7">
+          Value of states and actions
+        </button>
+      </h2>
+      <div id="rl7" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          <b>V(s)</b> is the expected return from a state if the agent follows its policy.
+          <b>Q(s, a)</b> is the expected return after taking one specific action in a state and
+          then continuing with the policy. We represent Q with a linear model: one weight per
+          state-action pair.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl8">
+          The Q-Learning target
+        </button>
+      </h2>
+      <div id="rl8" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          After taking an action, the agent builds a target value and nudges its model toward it:
+          <code>target = reward + gamma * future</code>, where <i>future</i> is the best Q-value
+          predicted for the next state (or just the reward if that state ends the episode). As a
+          worked example: with a current Q of 0, a reward of -1, &gamma; = 0.95, an estimated
+          future value of 10, and a learning rate &alpha; = 0.1, the target is
+          -1 + 0.95 &times; 10 = 8.5, and the updated Q becomes
+          0 + 0.1 &times; (8.5 - 0) = 0.85. A small immediate cost can still lead to a good
+          long-term decision.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl9">
+          Where scikit-learn fits in
+        </button>
+      </h2>
+      <div id="rl9" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
+        <div class="accordion-body">
+          A scikit-learn <code>SGDRegressor</code> plays the role of the Q function: it predicts a
+          numeric Q(s, a) and learns from one example at a time. Our own code defines the
+          environment: the actions, the rewards, the exploration rule and the target formula.
+          <code>predict()</code> estimates the four action values for a state; <code>partial_fit()</code>
+          learns from a single observed transition without restarting the model. Every state-action
+          pair is encoded as a one-hot vector with 100 positions (one per maze cell) times 4
+          actions, 400 features in total, with no intercept and no penalty term so that each
+          weight keeps its own meaning as a Q-value.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">Reward categories at a glance</h2>
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered align-middle mb-0">
+          <thead>
+            <tr><th>Category</th><th>Typical value</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Valid move</td><td>-1</td><td>Small cost per step, so shorter paths are preferred</td></tr>
+            <tr><td>Off-grid attempt</td><td>-3</td><td>Trying to leave the maze boundary</td></tr>
+            <tr><td>Wall hit</td><td>-5</td><td>Bumping into a wall cell</td></tr>
+            <tr><td>Danger zone</td><td>-10</td><td>Entering a marked danger cell</td></tr>
+            <tr><td>Goal reached</td><td>+50</td><td>Ends the episode successfully</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-warning">
+    <h2 class="h6 alert-heading">Danger zone: a penalty, not a wall</h2>
+    <p class="mb-0 small">
+      Unlike a wall, a danger zone does not block the agent: the move still happens and the
+      episode continues. It only carries a much larger penalty than a normal step, which is
+      exactly what a negative reward, or <b>penalty</b>, is for &mdash; it does not stop the
+      agent, it just makes that choice look worse during learning, so a well-trained policy
+      routes around danger zones whenever a safer path of similar length exists.
+    </p>
+  </div>
+
+  <a routerLink="/reinforcement/application" class="btn btn-primary mt-2">
+    Try the maze &rarr;
+  </a>
+</div>

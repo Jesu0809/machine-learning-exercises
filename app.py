@@ -6,6 +6,7 @@ import LogisticRegressionModel
 import DecisionTreeModel
 import ClusteringModel
 import ManualClustering
+import reinforcement
 
 app = Flask(__name__)
 
@@ -343,6 +344,23 @@ def manual_clustering_variance_plot():
     return Response(ManualClustering.generateVariancePlot(), mimetype="image/png",
                     headers={"Cache-Control": "no-store"})
 
+@app.route("/api/reinforcement/grid", methods=["GET"])
+def reinforcement_grid():
+    return jsonify({
+        "grid": reinforcement.GRID,
+        "start": reinforcement.START,
+        "goal": reinforcement.GOAL,
+        "actions": reinforcement.ACTION_NAMES,
+        "rows": reinforcement.ROWS,
+        "columns": reinforcement.COLUMNS,
+        "rewards": reinforcement.REWARD_TABLE,
+        "training_config": reinforcement.TRAINING_CONFIG,
+    })
+
+@app.route("/api/reinforcement/train", methods=["POST"])
+def reinforcement_train():
+    return jsonify(reinforcement.train(episodes=1000))
+
 @app.route("/")
 @app.route("/<path:filename>")
 def home(filename="index.html"):
@@ -350,3 +368,4 @@ def home(filename="index.html"):
     if filename != "index.html" and not os.path.isfile(file_path):
         filename = "index.html"
     return send_from_directory(ANGULAR_DIST_PATH, filename)
+
