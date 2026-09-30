@@ -18,6 +18,8 @@ import { DecisionTreeMetrics } from './pages/decision-tree-metrics/decision-tree
 import { ClusteringComponent } from './pages/clustering/clustering.component';
 import { ClusteringConcepts } from './pages/clustering-concepts/clustering-concepts';
 import { ClusteringManualExercise } from './pages/clustering-manual-exercise/clustering-manual-exercise';
+import { ReinforcementConcepts } from './pages/reinforcement-concepts/reinforcement-concepts';
+import { ReinforcementApplication } from './pages/reinforcement-application/reinforcement-application';
 import { NotFound } from './pages/not-found/not-found';
 
 export const routes: Routes = [
@@ -40,5 +42,7 @@ export const routes: Routes = [
   { path: 'clustering/concepts', component: ClusteringConcepts },
   { path: 'clustering/manual-exercise', component: ClusteringManualExercise },
   { path: 'clustering/application', component: ClusteringComponent },
+  { path: 'reinforcement/concepts', component: ReinforcementConcepts },
+  { path: 'reinforcement/application', component: ReinforcementApplication },
   { path: '**', component: NotFound },
 ];

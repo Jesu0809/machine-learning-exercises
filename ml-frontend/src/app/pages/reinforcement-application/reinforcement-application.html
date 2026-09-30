@@ -1,0 +1,303 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/reinforcement/concepts">Reinforcement Learning</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Application</li>
+    </ol>
+  </nav>
+
+  <div class="mb-4">
+    <h1>Reinforcement Learning: Find the Exit</h1>
+    <p class="lead">A Q-Learning agent learns, by trial and error, how to cross a 10&times;10 maze that also contains danger zones.</p>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">1. Problem Context</h2>
+      <p>
+        The agent (A) starts in the top-left cell of a 10&times;10 maze and must reach the target
+        (T) in the bottom-right cell. It has no map: it only knows its current position and,
+        after every move, the reward it received. Three wall segments jut in from alternating
+        edges of the grid, each leaving a gap on the opposite side, so the agent has to zigzag
+        through them instead of taking a straight line. Ten cells are marked as danger zones: the
+        agent can still walk into them, but doing so costs far more than a normal move, so a good
+        policy avoids them whenever a safer route exists.
+      </p>
+      <p class="mb-0">
+        Reinforcement learning is used here because there is no dataset of correct answers, only
+        a sequence of decisions that the agent has to learn from experience, balancing the
+        shortest route against the risk of crossing a danger zone.
+      </p>
+    </div>
+  </div>
+
+  @if (gridInfo(); as info) {
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">2. Reward System</h2>
+      <p class="text-muted">Every action falls into exactly one of five categories.</p>
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>When it applies</th>
+              <th>Reward</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Valid move</td>
+              <td>Moving into an open cell</td>
+              <td>{{ info.rewards.valid_move }}</td>
+            </tr>
+            <tr>
+              <td>Off-grid attempt</td>
+              <td>Trying to step outside the maze boundary</td>
+              <td>{{ info.rewards.off_grid }}</td>
+            </tr>
+            <tr>
+              <td>Wall hit</td>
+              <td>Trying to move into a wall cell</td>
+              <td>{{ info.rewards.wall_hit }}</td>
+            </tr>
+            <tr>
+              <td>Danger zone</td>
+              <td>Entering a danger cell (the move still happens)</td>
+              <td>{{ info.rewards.danger_zone }}</td>
+            </tr>
+            <tr>
+              <td>Goal reached</td>
+              <td>Entering the target cell (ends the episode)</td>
+              <td>{{ info.rewards.goal }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  }
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">3. The Maze</h2>
+      <p class="text-muted">
+        A is the start, T is the target, dark cells are walls, amber cells are danger zones.
+        Once you train the agent, the cells on its evaluation path are highlighted in green.
+      </p>
+      @if (gridInfo(); as info) {
+        <div class="table-responsive mb-3">
+          <table class="table table-bordered text-center align-middle mb-0" style="max-width: 460px;">
+            <tbody>
+              @for (row of rowIndices(); track row) {
+                <tr>
+                  @for (column of columnIndices(); track column) {
+                    <td style="width: 42px; height: 42px; font-weight: 600; font-size: 0.85rem;"
+                        [class.bg-dark]="isWall(row, column)"
+                        [class.text-white]="isWall(row, column)"
+                        [class.bg-warning]="isDanger(row, column) && !isOnPath(row, column)"
+                        [class.bg-success]="isOnPath(row, column) && !isWall(row, column)"
+                        [class.bg-opacity-25]="isOnPath(row, column) && !isWall(row, column)">
+                      {{ cellLabel(row, column) }}
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+      <button type="button" class="btn btn-primary" (click)="train()" [disabled]="loading()">
+        @if (loading()) {
+          <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        Train for 1000 episodes
+      </button>
+      @if (loading()) {
+        <span class="text-muted small ms-2">Training a 400-feature model can take a few seconds.</span>
+      }
+      @if (errorMessage()) {
+        <div class="alert alert-danger mt-3 mb-0">{{ errorMessage() }}</div>
+      }
+    </div>
+  </div>
+
+  @if (gridInfo(); as info) {
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">4. Training Configuration</h2>
+      <div class="row g-2">
+        <div class="col-6 col-lg-2">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.gamma }}</div>
+            <div class="stat-label">Discount &gamma;</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.epsilon_start }}</div>
+            <div class="stat-label">&epsilon; start</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.epsilon_min }}</div>
+            <div class="stat-label">&epsilon; floor</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.epsilon_decay }}</div>
+            <div class="stat-label">&epsilon; decay</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.learning_rate }}</div>
+            <div class="stat-label">Learning rate</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.max_steps_per_episode }}</div>
+            <div class="stat-label">Max steps / episode</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  @if (result(); as r) {
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h2 class="h5">5. Training Results</h2>
+        <p class="text-muted mb-2">
+          Pipeline: maze &rarr; one-hot encode(state, action) &rarr; 400 features &rarr;
+          <code>SGDRegressor</code> &rarr; &epsilon;-greedy action &rarr; observe reward &rarr;
+          build target &rarr; <code>partial_fit()</code>. Repeated for 1000 episodes, then
+          evaluated with <code>predict()</code> only.
+        </p>
+        <div class="row g-2">
+          <div class="col-6 col-lg-2">
+            <div class="stat-tile">
+              <div class="stat-value">{{ r.episodes }}</div>
+              <div class="stat-label">Episodes</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="stat-tile">
+              <div class="stat-value">{{ r.successes }} / {{ r.episodes }}</div>
+              <div class="stat-label">Reached the goal</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="stat-tile">
+              <div class="stat-value">{{ successRate() | number:'1.1-1' }}%</div>
+              <div class="stat-label">Success rate</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="stat-tile">
+              <div class="stat-value">{{ r.final_average | number:'1.2-2' }}</div>
+              <div class="stat-label">Mean reward, last 100 episodes</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="stat-tile">
+              <div class="stat-value">{{ r.final_epsilon }}</div>
+              <div class="stat-label">Final &epsilon;</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <div class="stat-tile">
+              <div class="stat-value">{{ r.reached_goal ? 'Yes' : 'No' }}</div>
+              <div class="stat-label">Evaluation reached goal</div>
+            </div>
+          </div>
+        </div>
+        <p class="small text-muted mt-3 mb-0">
+          Training success is measured while the agent still explores at random sometimes.
+          The evaluation below uses <code>predict()</code> only, with exploration turned off, so
+          it shows what the learned policy actually does.
+        </p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h2 class="h5">6. Evaluation Without Exploration</h2>
+        @if (r.reached_goal) {
+          <p>Goal reached in {{ r.steps.length }} moves.</p>
+        } @else {
+          <p>The goal was not reached within {{ r.steps.length }} moves.</p>
+        }
+        <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+          <table class="table table-striped table-sm align-middle mb-0">
+            <thead>
+              <tr><th>Step</th><th>State</th><th>Action</th><th>Next state</th><th>Cell type</th><th>Reward</th></tr>
+            </thead>
+            <tbody>
+              @for (step of r.steps; track step.number) {
+                <tr>
+                  <td>{{ step.number }}</td>
+                  <td>{{ stateLabel(step.state) }}</td>
+                  <td>{{ step.action }}</td>
+                  <td>{{ stateLabel(step.next_state) }}</td>
+                  <td>{{ step.cell_type }}</td>
+                  <td>{{ step.reward }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="h5">7. Learned Q-Values</h2>
+        <p class="text-muted">
+          The estimated value of each action from every open, non-wall, non-goal cell in the
+          maze ({{ r.q_table.length }} states in total).
+        </p>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle mb-0">
+            <thead>
+              <tr>
+                <th>State</th>
+                @if (gridInfo(); as info) {
+                  @for (action of info.actions; track action) {
+                    <th>{{ action }}</th>
+                  }
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of qTablePageRows(); track row.state) {
+                <tr>
+                  <td>{{ stateLabel(row.state) }}</td>
+                  @for (value of row.action_values; track $index) {
+                    <td>{{ value | number:'1.2-2' }}</td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <button type="button" class="btn btn-sm btn-outline-secondary"
+                  (click)="qTablePrevPage()" [disabled]="qTablePage() === 0">
+            &larr; Previous
+          </button>
+          <span class="small text-muted">Page {{ qTablePage() + 1 }} of {{ qTablePageCount() }}</span>
+          <button type="button" class="btn btn-sm btn-outline-secondary"
+                  (click)="qTableNextPage()" [disabled]="qTablePage() >= qTablePageCount() - 1">
+            Next &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
