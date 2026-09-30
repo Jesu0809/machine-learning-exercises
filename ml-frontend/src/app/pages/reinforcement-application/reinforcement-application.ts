@@ -66,7 +66,6 @@ export class ReinforcementApplication implements OnInit {
   ngOnInit(): void {
     this.service.getGrid().subscribe({
       next: (info) => this.gridInfo.set(info),
-      error: () => {},
     });
   }
 

@@ -1,4 +1,5 @@
 .venv/
+.venv312/
 __pycache__/
 *.pyc
 *.py[codz]
@@ -10,3 +11,4 @@ develop-eggs/
 dist/
 .DS_Store
 evidencias/
+.claude/
