@@ -169,11 +169,7 @@
   </div>
   }
 
-<<<<<<< HEAD
   @if (result(); as trainingResult) {
-=======
-  @if (result(); as r) {
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
     <div class="card shadow-sm mb-4">
       <div class="card-body">
         <h2 class="h5">5. Training Results</h2>
@@ -186,21 +182,13 @@
         <div class="row g-2">
           <div class="col-6 col-lg-2">
             <div class="stat-tile">
-<<<<<<< HEAD
               <div class="stat-value">{{ trainingResult.episodes }}</div>
-=======
-              <div class="stat-value">{{ r.episodes }}</div>
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
               <div class="stat-label">Episodes</div>
             </div>
           </div>
           <div class="col-6 col-lg-2">
             <div class="stat-tile">
-<<<<<<< HEAD
               <div class="stat-value">{{ trainingResult.successes }} / {{ trainingResult.episodes }}</div>
-=======
-              <div class="stat-value">{{ r.successes }} / {{ r.episodes }}</div>
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
               <div class="stat-label">Reached the goal</div>
             </div>
           </div>
@@ -212,31 +200,19 @@
           </div>
           <div class="col-6 col-lg-2">
             <div class="stat-tile">
-<<<<<<< HEAD
               <div class="stat-value">{{ trainingResult.final_average | number:'1.2-2' }}</div>
-=======
-              <div class="stat-value">{{ r.final_average | number:'1.2-2' }}</div>
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
               <div class="stat-label">Mean reward, last 100 episodes</div>
             </div>
           </div>
           <div class="col-6 col-lg-2">
             <div class="stat-tile">
-<<<<<<< HEAD
               <div class="stat-value">{{ trainingResult.final_epsilon }}</div>
-=======
-              <div class="stat-value">{{ r.final_epsilon }}</div>
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
               <div class="stat-label">Final &epsilon;</div>
             </div>
           </div>
           <div class="col-6 col-lg-2">
             <div class="stat-tile">
-<<<<<<< HEAD
               <div class="stat-value">{{ trainingResult.reached_goal ? 'Yes' : 'No' }}</div>
-=======
-              <div class="stat-value">{{ r.reached_goal ? 'Yes' : 'No' }}</div>
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
               <div class="stat-label">Evaluation reached goal</div>
             </div>
           </div>
@@ -252,17 +228,10 @@
     <div class="card shadow-sm mb-4">
       <div class="card-body">
         <h2 class="h5">6. Evaluation Without Exploration</h2>
-<<<<<<< HEAD
         @if (trainingResult.reached_goal) {
           <p>Goal reached in {{ trainingResult.steps.length }} moves.</p>
         } @else {
           <p>The goal was not reached within {{ trainingResult.steps.length }} moves.</p>
-=======
-        @if (r.reached_goal) {
-          <p>Goal reached in {{ r.steps.length }} moves.</p>
-        } @else {
-          <p>The goal was not reached within {{ r.steps.length }} moves.</p>
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
         }
         <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
           <table class="table table-striped table-sm align-middle mb-0">
@@ -270,11 +239,7 @@
               <tr><th>Step</th><th>State</th><th>Action</th><th>Next state</th><th>Cell type</th><th>Reward</th></tr>
             </thead>
             <tbody>
-<<<<<<< HEAD
               @for (step of trainingResult.steps; track step.number) {
-=======
-              @for (step of r.steps; track step.number) {
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
                 <tr>
                   <td>{{ step.number }}</td>
                   <td>{{ stateLabel(step.state) }}</td>
@@ -295,11 +260,7 @@
         <h2 class="h5">7. Learned Q-Values</h2>
         <p class="text-muted">
           The estimated value of each action from every open, non-wall, non-goal cell in the
-<<<<<<< HEAD
           maze ({{ trainingResult.q_table.length }} states in total).
-=======
-          maze ({{ r.q_table.length }} states in total).
->>>>>>> 9f220fec0c831d8d18f17c67e0d0f2744ed758da
         </p>
         <div class="table-responsive">
           <table class="table table-sm align-middle mb-0">
