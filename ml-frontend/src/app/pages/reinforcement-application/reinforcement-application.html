@@ -84,7 +84,8 @@
       <h2 class="h5">3. The Maze</h2>
       <p class="text-muted">
         A is the start, T is the target, dark cells are walls, amber cells are danger zones.
-        Once you train the agent, the cells on its evaluation path are highlighted in green.
+        Once you train the agent, the cells on its evaluation path get a green background and a
+        green outline, so a danger zone crossed by the path would still show in amber.
       </p>
       @if (gridInfo(); as info) {
         <div class="table-responsive mb-3">
@@ -94,11 +95,12 @@
                 <tr>
                   @for (column of columnIndices(); track column) {
                     <td style="width: 42px; height: 42px; font-weight: 600; font-size: 0.85rem;"
+                        [style.box-shadow]="isOnPath(row, column) ? 'inset 0 0 0 3px #20c997' : null"
                         [class.bg-dark]="isWall(row, column)"
                         [class.text-white]="isWall(row, column)"
-                        [class.bg-warning]="isDanger(row, column) && !isOnPath(row, column)"
-                        [class.bg-success]="isOnPath(row, column) && !isWall(row, column)"
-                        [class.bg-opacity-25]="isOnPath(row, column) && !isWall(row, column)">
+                        [class.bg-warning]="isDanger(row, column)"
+                        [class.bg-success]="isOnPath(row, column) && !isWall(row, column) && !isDanger(row, column)"
+                        [class.bg-opacity-25]="isOnPath(row, column) && !isWall(row, column) && !isDanger(row, column)">
                       {{ cellLabel(row, column) }}
                     </td>
                   }
@@ -112,7 +114,7 @@
         @if (loading()) {
           <span class="spinner-border spinner-border-sm me-1"></span>
         }
-        Train for 1000 episodes
+        Train Agent
       </button>
       @if (loading()) {
         <span class="text-muted small ms-2">Training a 400-feature model can take a few seconds.</span>
@@ -128,42 +130,115 @@
     <div class="card-body">
       <h2 class="h5">4. Training Configuration</h2>
       <div class="row g-2">
-        <div class="col-6 col-lg-2">
+        <div class="col-6 col-lg">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.episodes }}</div>
+            <div class="stat-label">Episodes</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg">
           <div class="stat-tile">
             <div class="stat-value">{{ info.training_config.gamma }}</div>
-            <div class="stat-label">Discount &gamma;</div>
+            <div class="stat-label">Discount factor</div>
           </div>
         </div>
-        <div class="col-6 col-lg-2">
+        <div class="col-6 col-lg">
           <div class="stat-tile">
-            <div class="stat-value">{{ info.training_config.epsilon_start }}</div>
-            <div class="stat-label">&epsilon; start</div>
+            <div class="stat-value">{{ info.training_config.epsilon_start | number:'1.1-3' }}</div>
+            <div class="stat-label">Initial epsilon</div>
           </div>
         </div>
-        <div class="col-6 col-lg-2">
+        <div class="col-6 col-lg">
           <div class="stat-tile">
             <div class="stat-value">{{ info.training_config.epsilon_min }}</div>
-            <div class="stat-label">&epsilon; floor</div>
+            <div class="stat-label">Minimum epsilon</div>
           </div>
         </div>
-        <div class="col-6 col-lg-2">
+        <div class="col-6 col-lg">
           <div class="stat-tile">
             <div class="stat-value">{{ info.training_config.epsilon_decay }}</div>
-            <div class="stat-label">&epsilon; decay</div>
+            <div class="stat-label">Epsilon decay</div>
           </div>
         </div>
-        <div class="col-6 col-lg-2">
+        <div class="col-6 col-lg">
           <div class="stat-tile">
             <div class="stat-value">{{ info.training_config.learning_rate }}</div>
             <div class="stat-label">Learning rate</div>
           </div>
         </div>
-        <div class="col-6 col-lg-2">
+        <div class="col-6 col-lg">
           <div class="stat-tile">
             <div class="stat-value">{{ info.training_config.max_steps_per_episode }}</div>
             <div class="stat-label">Max steps / episode</div>
           </div>
         </div>
+        <div class="col-6 col-lg">
+          <div class="stat-tile">
+            <div class="stat-value">{{ info.training_config.update_every }}</div>
+            <div class="stat-label">Update every (steps)</div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive mt-3">
+        <table class="table table-sm align-middle mb-0">
+          <thead>
+            <tr><th>Parameter</th><th>Why this value</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Episodes</td>
+              <td>
+                The maze has 79 non-wall states besides the target, with 4 actions each. In our runs
+                every episode reaches the target from episode 111 onward, and the average episode
+                length settles at about 42 moves after episode 500, so 1000 episodes leaves margin.
+              </td>
+            </tr>
+            <tr>
+              <td>Discount &gamma;</td>
+              <td>
+                The shortest safe route takes 40 moves, so the +{{ info.rewards.goal }} at the end
+                has to stay visible from the start: 0.95 keeps distant rewards relevant without
+                making every state look equally good.
+              </td>
+            </tr>
+            <tr>
+              <td>&epsilon; start, floor and decay</td>
+              <td>
+                The agent begins fully random (1.0) because it knows nothing. Multiplying by 0.995 after
+                every episode reaches the 0.05 floor around episode 600, so the last 400 episodes are
+                mostly spent refining the best route while still trying a random move 5% of the time.
+              </td>
+            </tr>
+            <tr>
+              <td>Learning rate</td>
+              <td>
+                Each <code>partial_fit()</code> call moves a Q-value 10% of the way toward its new
+                target. With 0.01 the final evaluation does not reach the target after 1000 episodes,
+                and 0.03 learns more slowly (909 successful episodes instead of 954); with 0.3 or 0.5
+                the agent settles on a shorter route through a danger zone that ends with a lower
+                total reward (8 instead of 11).
+              </td>
+            </tr>
+            <tr>
+              <td>Update every</td>
+              <td>
+                The agent stores its last {{ info.training_config.update_every }} transitions and
+                <code>partial_fit()</code> learns from them in the order they happened. Calling it
+                once per step made training take about 27 seconds on a laptop and longer than the
+                server allows on Render; grouping {{ info.training_config.update_every }} transitions
+                learns the same route in about 2 seconds.
+              </td>
+            </tr>
+            <tr>
+              <td>Max steps / episode</td>
+              <td>
+                A random walk in a 10&times;10 maze rarely finds the exit in a few dozen moves, so 300
+                steps gives early episodes room to reach the target while still cutting off an agent
+                that wanders in circles.
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -176,44 +251,57 @@
         <p class="text-muted mb-2">
           Pipeline: maze &rarr; one-hot encode(state, action) &rarr; 400 features &rarr;
           <code>SGDRegressor</code> &rarr; &epsilon;-greedy action &rarr; observe reward &rarr;
-          build target &rarr; <code>partial_fit()</code>. Repeated for 1000 episodes, then
-          evaluated with <code>predict()</code> only.
+          build target &rarr; <code>partial_fit()</code> every 20 transitions &rarr; refresh the
+          Q-values with <code>predict()</code>. Repeated for 1000 episodes, then evaluated with
+          <code>predict()</code> only.
         </p>
         <div class="row g-2">
-          <div class="col-6 col-lg-2">
+          <div class="col-6 col-lg-3">
             <div class="stat-tile">
               <div class="stat-value">{{ trainingResult.episodes }}</div>
-              <div class="stat-label">Episodes</div>
+              <div class="stat-label">Total episodes</div>
             </div>
           </div>
-          <div class="col-6 col-lg-2">
+          <div class="col-6 col-lg-3">
             <div class="stat-tile">
               <div class="stat-value">{{ trainingResult.successes }} / {{ trainingResult.episodes }}</div>
-              <div class="stat-label">Reached the goal</div>
+              <div class="stat-label">Successful episodes</div>
             </div>
           </div>
-          <div class="col-6 col-lg-2">
+          <div class="col-6 col-lg-3">
             <div class="stat-tile">
               <div class="stat-value">{{ successRate() | number:'1.1-1' }}%</div>
               <div class="stat-label">Success rate</div>
             </div>
           </div>
-          <div class="col-6 col-lg-2">
+          <div class="col-6 col-lg-3">
             <div class="stat-tile">
               <div class="stat-value">{{ trainingResult.final_average | number:'1.2-2' }}</div>
               <div class="stat-label">Mean reward, last 100 episodes</div>
             </div>
           </div>
-          <div class="col-6 col-lg-2">
+          <div class="col-6 col-lg-3">
             <div class="stat-tile">
               <div class="stat-value">{{ trainingResult.final_epsilon }}</div>
-              <div class="stat-label">Final &epsilon;</div>
+              <div class="stat-label">Final epsilon</div>
             </div>
           </div>
-          <div class="col-6 col-lg-2">
+          <div class="col-6 col-lg-3">
+            <div class="stat-tile">
+              <div class="stat-value">{{ trainingResult.evaluation_moves }}</div>
+              <div class="stat-label">Moves in final evaluation</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stat-tile">
+              <div class="stat-value">{{ trainingResult.evaluation_reward }}</div>
+              <div class="stat-label">Total evaluation reward</div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
             <div class="stat-tile">
               <div class="stat-value">{{ trainingResult.reached_goal ? 'Yes' : 'No' }}</div>
-              <div class="stat-label">Evaluation reached goal</div>
+              <div class="stat-label">Goal reached</div>
             </div>
           </div>
         </div>
@@ -229,10 +317,20 @@
       <div class="card-body">
         <h2 class="h5">6. Evaluation Without Exploration</h2>
         @if (trainingResult.reached_goal) {
-          <p>Goal reached in {{ trainingResult.steps.length }} moves.</p>
+          <p>
+            Goal reached in {{ trainingResult.evaluation_moves }} moves with a total reward of
+            {{ trainingResult.evaluation_reward }}.
+            @if (dangerStepsOnPath() === 0) {
+              The route does not step on any danger zone.
+            } @else {
+              The route crosses {{ dangerStepsOnPath() }} danger zone(s).
+            }
+          </p>
         } @else {
-          <p>The goal was not reached within {{ trainingResult.steps.length }} moves.</p>
+          <p>The goal was not reached within {{ trainingResult.evaluation_moves }} moves.</p>
         }
+        <div class="small text-muted mb-1">Final path</div>
+        <p class="small border rounded p-2 mb-3" style="line-height: 1.8;">{{ pathText() }}</p>
         <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
           <table class="table table-striped table-sm align-middle mb-0">
             <thead>

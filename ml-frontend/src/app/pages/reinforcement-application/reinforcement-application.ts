@@ -38,6 +38,16 @@ export class ReinforcementApplication implements OnInit {
     return new Set(response.path.map(([row, column]) => `${row},${column}`));
   });
 
+  public readonly pathText = computed(() => {
+    const response = this.result();
+    return response ? response.path.map((state) => this.stateLabel(state)).join(' → ') : '';
+  });
+
+  public readonly dangerStepsOnPath = computed(() => {
+    const response = this.result();
+    return response ? response.steps.filter((step) => step.cell_type === 'Danger').length : 0;
+  });
+
   public readonly successRate = computed(() => {
     const response = this.result();
     if (!response || response.episodes === 0) {
