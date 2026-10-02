@@ -145,7 +145,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl5">
-          Exploration and exploitation
+          Exploration, exploitation and the &epsilon;-greedy strategy
         </button>
       </h2>
       <div id="rl5" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
@@ -182,7 +182,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl7">
-          Value of states and actions
+          State value V(s) and action value Q(s, a)
         </button>
       </h2>
       <div id="rl7" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
@@ -198,12 +198,15 @@
     <div class="accordion-item">
       <h2 class="accordion-header">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rl8">
-          The Q-Learning target
+          Q-Learning and its target
         </button>
       </h2>
       <div id="rl8" class="accordion-collapse collapse" data-bs-parent="#rlConceptsAccordion">
         <div class="accordion-body">
-          After taking an action, the agent builds a target value and nudges its model toward it:
+          <b>Q-Learning</b> learns Q(s, a) directly from experience, without a model of the maze:
+          after every move it corrects its estimate using the reward it just received and the best
+          value it currently expects from the next cell. Once trained, the policy is simply to pick
+          the action with the highest Q-value in each cell. After taking an action, the agent builds a target value and nudges its model toward it:
           <code>target = reward + gamma * future</code>, where <i>future</i> is the best Q-value
           predicted for the next state (or just the reward if that state ends the episode). As a
           worked example: with a current Q of 0, a reward of -1, &gamma; = 0.95, an estimated
@@ -226,8 +229,10 @@
           A scikit-learn <code>SGDRegressor</code> plays the role of the Q function: it predicts a
           numeric Q(s, a) and learns from one example at a time. Our own code defines the
           environment: the actions, the rewards, the exploration rule and the target formula.
-          <code>predict()</code> estimates the four action values for a state; <code>partial_fit()</code>
-          learns from a single observed transition without restarting the model. Every state-action
+          <code>predict()</code> estimates the action values; <code>partial_fit()</code> learns from
+          the agent's most recent transitions (up to 20, in the order they happened) without
+          restarting the model, and the Q-values are refreshed with <code>predict()</code> right
+          after. Every state-action
           pair is encoded as a one-hot vector with 100 positions (one per maze cell) times 4
           actions, 400 features in total, with no intercept and no penalty term so that each
           weight keeps its own meaning as a Q-value.
@@ -243,7 +248,7 @@
       <div class="table-responsive">
         <table class="table table-sm table-bordered align-middle mb-0">
           <thead>
-            <tr><th>Category</th><th>Typical value</th><th>Meaning</th></tr>
+            <tr><th>Category</th><th>Value</th><th>Meaning</th></tr>
           </thead>
           <tbody>
             <tr><td>Valid move</td><td>-1</td><td>Small cost per step, so shorter paths are preferred</td></tr>

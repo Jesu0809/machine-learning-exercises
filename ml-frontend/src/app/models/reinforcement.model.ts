@@ -7,12 +7,14 @@ export interface RewardTable {
 }
 
 export interface TrainingConfig {
+  episodes: number;
   gamma: number;
   epsilon_start: number;
   epsilon_min: number;
   epsilon_decay: number;
   learning_rate: number;
   max_steps_per_episode: number;
+  update_every: number;
 }
 
 export interface GridInfo {
@@ -46,6 +48,8 @@ export interface TrainResult {
   final_average: number;
   final_epsilon: number;
   reached_goal: boolean;
+  evaluation_moves: number;
+  evaluation_reward: number;
   path: [number, number][];
   steps: ReinforcementStep[];
   q_table: QTableRow[];
