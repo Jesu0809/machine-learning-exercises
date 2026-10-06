@@ -359,7 +359,7 @@ def reinforcement_grid():
 
 @app.route("/api/reinforcement/train", methods=["POST"])
 def reinforcement_train():
-    return jsonify(reinforcement.train(episodes=1000))
+    return jsonify(reinforcement.train(episodes=reinforcement.EPISODES))
 
 @app.route("/")
 @app.route("/<path:filename>")

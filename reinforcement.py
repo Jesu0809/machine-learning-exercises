@@ -61,20 +61,24 @@ REWARD_TABLE = {
 }
 
 # Training configuration, kept as named constants so it can be shown as-is.
+EPISODES = 1000
 GAMMA = 0.95
 EPSILON_START = 1.0
 EPSILON_MIN = 0.05
 EPSILON_DECAY = 0.995
 LEARNING_RATE = 0.1
 MAX_STEPS_PER_EPISODE = 300
+UPDATE_EVERY = 20
 
 TRAINING_CONFIG = {
+    "episodes": EPISODES,
     "gamma": GAMMA,
     "epsilon_start": EPSILON_START,
     "epsilon_min": EPSILON_MIN,
     "epsilon_decay": EPSILON_DECAY,
     "learning_rate": LEARNING_RATE,
     "max_steps_per_episode": MAX_STEPS_PER_EPISODE,
+    "update_every": UPDATE_EVERY,
 }
 
 
@@ -94,7 +98,7 @@ def cell_type(position):
     if value == CELL_DANGER:
         return "Danger"
 
-    return "Open"
+    return "Path"
 
 
 def step(state, action):
@@ -145,7 +149,21 @@ def predict_q_values(model, state):
     return model.predict(features)
 
 
-def train(episodes=1000):
+# Every (state, action) pair encoded once, so one predict() call returns the full table.
+ALL_FEATURES = np.array([
+    encode((row, column), action)
+    for row in range(ROWS)
+    for column in range(COLUMNS)
+    for action in range(NUMBER_OF_ACTIONS)
+])
+
+
+def predict_q_table(model):
+
+    return model.predict(ALL_FEATURES).reshape(ROWS, COLUMNS, NUMBER_OF_ACTIONS)
+
+
+def train(episodes=EPISODES):
 
     if episodes < 1:
         raise ValueError("episodes must be at least 1")
@@ -156,12 +174,14 @@ def train(episodes=1000):
     epsilon = EPSILON_START
 
     # Incremental linear model for Q-values.
+    # shuffle=False keeps the transitions of each batch in the order they happened.
     model = SGDRegressor(
         loss="squared_error",
         penalty=None,
         fit_intercept=False,
         learning_rate="constant",
         eta0=LEARNING_RATE,
+        shuffle=False,
         random_state=42,
     )
 
@@ -170,6 +190,22 @@ def train(episodes=1000):
         np.zeros((1, NUMBER_OF_FEATURES)),
         np.array([0.0]),
     )
+
+    q_estimates = predict_q_table(model)
+    batch_features = []
+    batch_targets = []
+
+    # Learn from the stored experience and refresh the Q estimates.
+    def learn():
+        nonlocal q_estimates, batch_features, batch_targets
+        if batch_features:
+            model.partial_fit(
+                np.array(batch_features),
+                np.array(batch_targets)
+            )
+            batch_features = []
+            batch_targets = []
+        q_estimates = predict_q_table(model)
 
     successes = 0
     rewards = []
@@ -186,7 +222,7 @@ def train(episodes=1000):
             if rng.random() < epsilon:
                 action = rng.randrange(NUMBER_OF_ACTIONS)
             else:
-                q_values = predict_q_values(model, state)
+                q_values = q_estimates[state]
 
                 best_actions = np.flatnonzero(
                     q_values == q_values.max()
@@ -201,23 +237,23 @@ def train(episodes=1000):
             if terminated:
                 target = float(reward)
             else:
-                next_q_values = predict_q_values(model, next_state)
-                target = reward + gamma * float(next_q_values.max())
+                target = reward + gamma * float(q_estimates[next_state].max())
 
-            # Learn from the transition
-            features = encode(state, action).reshape(1, -1)
-
-            model.partial_fit(
-                features,
-                np.array([target])
-            )
+            # Store the experience
+            batch_features.append(encode(state, action))
+            batch_targets.append(target)
 
             state = next_state
             total += reward
 
+            if terminated or len(batch_features) >= UPDATE_EVERY:
+                learn()
+
             if terminated:
                 successes += 1
                 break
+
+        learn()
 
         # Record reward from the episode
         rewards.append(total)
@@ -251,6 +287,7 @@ def train(episodes=1000):
             break
 
     reached_goal = state == GOAL
+    evaluation_reward = sum(item["reward"] for item in steps)
 
     # Build a display table from model predictions.
     q_table = []
@@ -273,6 +310,8 @@ def train(episodes=1000):
         ),
         "final_epsilon": round(epsilon, 4),
         "reached_goal": reached_goal,
+        "evaluation_moves": len(steps),
+        "evaluation_reward": evaluation_reward,
         "path": path,
         "steps": steps,
         "q_table": q_table,
